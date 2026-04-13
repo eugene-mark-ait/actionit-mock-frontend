@@ -13,10 +13,16 @@
     scroll-behavior: smooth;
     /* Fallback alignment with sticky nav for native hash navigation */
     scroll-padding-top: 6rem;
+    overflow-x: clip;
+  }
+  #root {
+    min-width: 0;
+    width: 100%;
   }
   body {
     @apply antialiased bg-[#fafafa] text-neutral-900;
     font-family: var(--font-body), 'Inter', system-ui, sans-serif;
+    overflow-x: clip;
   }
   h1,
   h2,

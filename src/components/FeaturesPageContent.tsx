@@ -63,7 +63,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -106,7 +106,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -183,7 +183,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -226,7 +226,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -268,7 +268,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -311,7 +311,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -389,7 +389,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -432,7 +432,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}
@@ -466,7 +466,7 @@ export function FeaturesPageContent() {
       </section>
 
       <section id="actionit-command" className="scroll-mt-28 bg-white py-24">
-        <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <h2
             className="mb-6 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
             style={{ fontFamily: headingFont }}

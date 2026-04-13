@@ -2,7 +2,11 @@ import { useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { navFeatures, navIndustries, navProductLinks } from '../data/siteContent'
+import { cn } from '../lib/cn'
 import { scrollToHash as scrollToHashSmooth } from '../lib/scrollToHash'
+
+const dropdownPanelClass =
+  'rounded-xl border border-zinc-800/70 bg-zinc-950/92 backdrop-blur-xl shadow-xl shadow-black/40'
 
 export function Navbar() {
   const location = useLocation()
@@ -38,16 +42,16 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-[200] w-full shrink-0 pointer-events-none bg-transparent">
-      <div className="mx-auto w-full max-w-[920px] px-4 pt-3 pb-3 md:pt-4 md:pb-4">
+    <header className="sticky top-0 z-[200] w-full min-w-0 shrink-0 pointer-events-none bg-transparent">
+      <div className="mx-auto w-full max-w-7xl px-4 pt-3 pb-3 sm:px-6 md:px-10 md:pt-4 md:pb-4 lg:px-16 xl:px-24">
         <nav
-          className="pointer-events-auto flex items-center justify-between gap-4 rounded-2xl border px-4 py-2.5 md:px-6 backdrop-blur-xl border-white/20 shadow-[0_2px_24px_rgba(0,0,0,0.12)] bg-black/[0.12] supports-[backdrop-filter]:bg-black/[0.08]"
+          className="pointer-events-auto flex min-w-0 items-center justify-between gap-3 rounded-2xl border px-3 py-2.5 backdrop-blur-xl border-white/20 shadow-[0_2px_24px_rgba(0,0,0,0.12)] bg-black/[0.12] supports-[backdrop-filter]:bg-black/[0.08] sm:gap-4 sm:px-4 md:px-6"
           aria-label="Global navigation"
         >
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex min-w-0 shrink-0 items-center gap-2">
             <Link
               to="/"
-              className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]/40 rounded-md shrink-0"
+              className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]/40 shrink-0"
               aria-label="actionit.ai Home"
             >
               <img
@@ -67,7 +71,7 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex md:min-w-0 md:items-center md:gap-1">
             <div
               className="relative"
               onMouseEnter={() => {
@@ -89,16 +93,13 @@ export function Navbar() {
               </button>
               {openDrop === 'product' && (
                 <div className="absolute left-0 top-full pt-1 z-50">
-                  <ul
-                    className="grid gap-1 p-2 w-[280px] rounded-xl border border-white/20 bg-black/25 backdrop-blur-xl shadow-lg"
-                    role="menu"
-                  >
+                  <ul className={cn('grid w-[280px] gap-1 p-2', dropdownPanelClass)} role="menu">
                     {navProductLinks.map((item) => (
                       <li key={item.href}>
                         <a
                           href={item.href}
                           role="menuitem"
-                          className="block rounded-lg px-3 py-2 hover:bg-white/10"
+                          className="block rounded-lg px-3 py-2 hover:bg-white/12"
                           onClick={(e) => handleHashLink(e, item.href)}
                         >
                           <span className="block font-medium text-zinc-100">{item.label}</span>
@@ -132,12 +133,12 @@ export function Navbar() {
               </button>
               {openDrop === 'industries' && (
                 <div className="absolute left-0 top-full pt-1 z-50">
-                  <ul className="p-2 w-[220px] rounded-xl border border-white/20 bg-black/25 backdrop-blur-xl shadow-lg">
+                  <ul className={cn('w-[220px] p-2', dropdownPanelClass)}>
                     {navIndustries.map((item) => (
                       <li key={item.href}>
                         <button
                           type="button"
-                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-sm text-zinc-100"
+                          className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-100 hover:bg-white/12"
                           onClick={() => handleRoute(item.href)}
                         >
                           {item.label}
@@ -170,12 +171,12 @@ export function Navbar() {
               </button>
               {openDrop === 'features' && (
                 <div className="absolute left-0 top-full pt-1 z-50">
-                  <ul className="p-2 w-[260px] rounded-xl border border-white/20 bg-black/25 backdrop-blur-xl shadow-lg">
+                  <ul className={cn('w-[260px] p-2', dropdownPanelClass)}>
                     {navFeatures.map((item) => (
                       <li key={item.href}>
                         <button
                           type="button"
-                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-sm text-zinc-100"
+                          className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-100 hover:bg-white/12"
                           onClick={() => handleRoute(item.href)}
                         >
                           {item.label}
@@ -188,7 +189,7 @@ export function Navbar() {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden shrink-0 items-center gap-3 md:flex">
             <Link
               to="/login"
               className="inline-flex items-center justify-center rounded-full min-h-[44px] px-6 py-2.5 text-sm font-semibold bg-[#00B4D8] text-white shadow-sm hover:bg-[#0ea5e9] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]"
@@ -208,14 +209,20 @@ export function Navbar() {
         </nav>
 
         {mobileOpen && (
-          <div className="md:hidden pointer-events-auto mt-2 rounded-2xl border border-white/20 bg-black/25 backdrop-blur-xl p-4 shadow-xl">
+          <div
+            className={cn(
+              'pointer-events-auto mt-2 p-4 md:hidden',
+              dropdownPanelClass,
+              'rounded-2xl border-zinc-800/80',
+            )}
+          >
             <div className="flex flex-col gap-1">
               <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide px-2 pt-1">Product</p>
               {navProductLinks.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
-                  className="py-2 px-2 rounded-lg text-zinc-100 font-medium hover:bg-white/10"
+                  className="rounded-lg px-2 py-2 font-medium text-zinc-100 hover:bg-white/12"
                   onClick={(e) => handleHashLink(e, item.href)}
                 >
                   {item.label}
@@ -227,7 +234,7 @@ export function Navbar() {
                 <button
                   key={item.href}
                   type="button"
-                  className="text-left py-2 px-2 rounded-lg text-zinc-100 hover:bg-white/10"
+                  className="rounded-lg px-2 py-2 text-left text-zinc-100 hover:bg-white/12"
                   onClick={() => handleRoute(item.href)}
                 >
                   {item.label}
@@ -239,7 +246,7 @@ export function Navbar() {
                 <button
                   key={item.href}
                   type="button"
-                  className="text-left py-2 px-2 rounded-lg text-zinc-100 hover:bg-white/10"
+                  className="rounded-lg px-2 py-2 text-left text-zinc-100 hover:bg-white/12"
                   onClick={() => handleRoute(item.href)}
                 >
                   {item.label}

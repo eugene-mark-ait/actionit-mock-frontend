@@ -49,14 +49,17 @@ export function SignInPage() {
   }, [])
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden" style={{ backgroundColor: '#FAFAFA' }}>
+    <div
+      className="relative min-h-screen min-w-0 overflow-x-clip"
+      style={{ backgroundColor: '#FAFAFA' }}
+    >
       <div className="pointer-events-none absolute inset-x-0 top-0 z-0 min-h-[100dvh]">
         <HeroFirstViewportBackdrop />
       </div>
 
       <Navbar />
 
-      <main className="relative z-10 mx-auto flex min-h-[calc(100dvh-5rem)] max-w-lg flex-col justify-center px-4 pb-16 pt-8 sm:px-6">
+      <main className="relative z-10 mx-auto flex min-h-[calc(100dvh-5rem)] w-full min-w-0 max-w-lg flex-col justify-center px-4 pb-16 pt-8 sm:px-6">
         <div
           className="w-full rounded-2xl border border-white/25 bg-white/55 p-8 shadow-[0_2px_24px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:p-10"
           style={{

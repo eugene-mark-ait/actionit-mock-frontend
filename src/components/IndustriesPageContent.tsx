@@ -55,7 +55,7 @@ export function IndustriesPageContent() {
   return (
     <div>
       <section className="border-b border-neutral-200 bg-[#fafafa] py-16 lg:py-20">
-        <div className="mx-auto max-w-3xl px-6 text-center sm:px-8">
+        <div className="mx-auto max-w-4xl px-6 text-center sm:px-8 lg:px-12">
           <h1
             className="mb-4 text-4xl font-bold text-[#0F172A] sm:text-5xl"
             style={{ fontFamily: headingFont }}

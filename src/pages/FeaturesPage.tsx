@@ -68,9 +68,9 @@ export function FeaturesPage() {
   }, [location.hash, location.pathname])
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen min-w-0 overflow-x-clip bg-[#fafafa]">
       <Navbar />
-      <main>
+      <main className="min-w-0">
         <FeaturesPageContent />
       </main>
       <Footer />

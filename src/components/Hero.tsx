@@ -36,7 +36,7 @@ export function HeroFirstViewportBackdrop() {
         className="pointer-events-none absolute left-0 right-0 top-0 z-[1] h-[100dvh] w-full"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%)',
+            'linear-gradient(to bottom, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.18) 28%, rgba(0, 0, 0, 0.08) 55%, transparent 100%)',
         }}
         aria-hidden
       />
@@ -61,12 +61,12 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative z-10 flex min-h-0 flex-1 flex-col overflow-x-hidden pt-8 sm:pt-12"
+      className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-clip pt-8 sm:pt-12"
       aria-label="Hero section"
     >
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 md:px-16 lg:px-24 pb-24 md:pb-32">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-          <div className="hidden lg:block lg:order-1" aria-hidden="false">
+        <div className="grid min-w-0 grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+          <div className="hidden min-w-0 lg:block lg:order-1" aria-hidden="false">
             <div className="hero-image-in">
               <div className="relative">
                 <div
@@ -175,7 +175,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="lg:order-2 text-center lg:text-left hero-text-in">
+          <div className="min-w-0 lg:order-2 text-center lg:text-left hero-text-in">
             <div
               className="mb-8 inline-flex"
               style={{ opacity: trustOpacity, transition: 'opacity 150ms linear' }}

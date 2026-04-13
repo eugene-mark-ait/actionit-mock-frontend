@@ -45,7 +45,7 @@ function PartnerLogoMarquee() {
     </div>
   )
   return (
-    <div className="relative overflow-hidden w-full select-none">
+    <div className="relative w-full min-w-0 overflow-hidden select-none">
       <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-white to-transparent z-10" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-white to-transparent z-10" />
       <div className="flex w-max animate-partner-marquee hover:[animation-play-state:paused]">
@@ -186,7 +186,7 @@ export function PillarsSection() {
               <div
                 key={pillar.id}
                 className={cn(
-                  '-mx-2 flex max-w-lg items-center gap-6 rounded-lg sm:mx-0 transition-all duration-700 ease-out',
+                  '-mx-2 flex min-w-0 max-w-lg items-center gap-6 rounded-lg sm:mx-0 transition-all duration-700 ease-out',
                   visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
                 )}
                 style={{ transitionDelay: `${o * 150}ms` }}
@@ -194,14 +194,14 @@ export function PillarsSection() {
                 <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg bg-[#00D4FF]/10 text-[#00B4D8]">
                   <Icon className="h-10 w-10" strokeWidth={1.75} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h3
                     className="font-semibold text-lg tracking-[-0.015em] text-[#0F172A]"
                     style={{ fontFamily: "'Recoleta Light', sans-serif" }}
                   >
                     {pillar.title}
                   </h3>
-                  <p className="mt-1 text-pretty text-neutral-600 text-sm leading-relaxed">
+                  <p className="mt-1 text-pretty break-words text-neutral-600 text-sm leading-relaxed">
                     {pillar.description.split('actionit.ai').map((part, i, arr) =>
                       i === arr.length - 1 ? (
                         part
@@ -256,11 +256,14 @@ export function HowItWorksSection() {
             </p>
           </div>
         </div>
-        <div className="w-full max-w-3xl mx-auto">
-          <ol className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-6 sm:gap-0" aria-label="How it works steps">
+        <div className="mx-auto w-full min-w-0 max-w-3xl">
+          <ol
+            className="flex w-full min-w-0 flex-col gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
+            aria-label="How it works steps"
+          >
             {howItWorksSteps.map((step, o) => {
               return (
-                <li key={step.id} className="flex-1 flex flex-col sm:flex-row sm:items-center">
+                <li key={step.id} className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center">
                   {o > 0 && (
                     <div className="hidden sm:block flex-1 h-0.5 bg-[#00D4FF] mr-2 min-w-[1rem]" aria-hidden />
                   )}
@@ -344,7 +347,7 @@ export function DemoSection() {
   return (
     <div id="demo" className="scroll-mt-28">
       <section className="relative isolate overflow-hidden bg-white px-6 sm:px-10 md:px-16 lg:px-24 py-14 sm:py-20 lg:overflow-visible">
-        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:max-w-7xl lg:grid-cols-2 lg:items-start lg:gap-y-10">
           <div className="lg:pr-4 lg:max-w-xl">
             <p className="text-base/7 font-semibold text-indigo-600">Increase Productivity</p>
             <h2 className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
