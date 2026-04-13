@@ -1,0 +1,148 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-cyan: #00b4d8;
+  --color-brand-cyan-bright: #00d4ff;
+  --color-brand-navy: #0f172a;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply antialiased bg-[#fafafa] text-neutral-900;
+    font-family: var(--font-body), 'Inter', system-ui, sans-serif;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), 'Satoshi', system-ui, sans-serif;
+  }
+}
+
+@keyframes hero-bg-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-image-in {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) translate(0);
+  }
+  33% {
+    transform: translateY(-10px) translate(5px);
+  }
+  66% {
+    transform: translateY(5px) translate(-5px);
+  }
+}
+
+/* Hero mockup badges: gentle vertical bounce, staggered via animation-delay */
+@keyframes mockup-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+.hero-bg-in {
+  animation: hero-bg-in 0.9s ease-out forwards;
+}
+
+.hero-text-in {
+  opacity: 0;
+  animation: hero-text-in 1s ease-out 0.6s forwards;
+}
+
+.hero-image-in {
+  opacity: 0;
+  animation: hero-image-in 1s ease-out 1.2s forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-mockup-bounce {
+  animation: mockup-bounce 2.75s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-in,
+  .hero-text-in,
+  .hero-image-in,
+  .animate-float,
+  .animate-mockup-bounce,
+  .animate-marquee {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+
+/* Partner logo strip: two identical halves, translate -50% for seamless loop */
+@keyframes partner-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-partner-marquee {
+  animation: partner-marquee 55s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-partner-marquee {
+    animation: none;
+  }
+}
