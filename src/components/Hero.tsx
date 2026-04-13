@@ -239,7 +239,7 @@ export function Hero() {
                 className="inline-flex items-center justify-center rounded-full min-h-[44px] px-8 py-3 text-sm font-semibold bg-[#00B4D8] text-white shadow-lg hover:bg-[#0ea5e9] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Start Free with actionit.ai"
               >
-                Get Started Free
+                Get Started
               </Link>
               <a
                 href="#demo"

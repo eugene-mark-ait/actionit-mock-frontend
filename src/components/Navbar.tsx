@@ -193,7 +193,7 @@ export function Navbar() {
               to="/login"
               className="inline-flex items-center justify-center rounded-full min-h-[44px] px-6 py-2.5 text-sm font-semibold bg-[#00B4D8] text-white shadow-sm hover:bg-[#0ea5e9] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]"
             >
-              Get Started Free
+              Get Started
             </Link>
           </div>
 
@@ -250,7 +250,7 @@ export function Navbar() {
                 className="mt-3 inline-flex justify-center rounded-full py-3 font-semibold bg-[#00B4D8] text-white"
                 onClick={() => setMobileOpen(false)}
               >
-                Get Started Free
+                Get Started
               </Link>
             </div>
           </div>

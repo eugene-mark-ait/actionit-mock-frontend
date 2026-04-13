@@ -5,12 +5,13 @@ import { FeaturesPage } from './pages/FeaturesPage'
 import { HomePage } from './pages/HomePage'
 import { IndustriesPage } from './pages/IndustriesPage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
+import { SignInPage } from './pages/SignInPage'
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<PlaceholderPage title="Sign in" />} />
+      <Route path="/login" element={<SignInPage />} />
       <Route path="/privacy-policy" element={<PlaceholderPage title="Privacy Policy" />} />
       <Route path="/TOS" element={<PlaceholderPage title="Terms of Service" />} />
       <Route path="/features/:slug" element={<FeaturesLegacyRedirect />} />
