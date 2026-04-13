@@ -11,6 +11,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Fallback alignment with sticky nav for native hash navigation */
+    scroll-padding-top: 6rem;
   }
   body {
     @apply antialiased bg-[#fafafa] text-neutral-900;
@@ -20,6 +22,12 @@
   h2,
   h3 {
     font-family: var(--font-display), 'Satoshi', system-ui, sans-serif;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 

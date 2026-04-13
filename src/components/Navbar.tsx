@@ -2,11 +2,7 @@ import { useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { navFeatures, navIndustries, navProductLinks } from '../data/siteContent'
-
-function scrollToHash(hash: string) {
-  const el = document.querySelector(hash)
-  el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
+import { scrollToHash as scrollToHashSmooth } from '../lib/scrollToHash'
 
 export function Navbar() {
   const location = useLocation()
@@ -20,7 +16,7 @@ export function Navbar() {
     if (!href.startsWith('#')) return
     e.preventDefault()
     if (isHome) {
-      scrollToHash(href)
+      scrollToHashSmooth(href)
     } else {
       void navigate({ pathname: '/', hash: href.slice(1) })
     }
@@ -29,7 +25,14 @@ export function Navbar() {
   }
 
   const handleRoute = (path: string) => {
-    void navigate(path)
+    const hashIdx = path.indexOf('#')
+    if (hashIdx !== -1) {
+      const pathname = path.slice(0, hashIdx) || '/'
+      const hashFrag = path.slice(hashIdx + 1)
+      void navigate({ pathname, hash: hashFrag || undefined })
+    } else {
+      void navigate(path)
+    }
     setOpenDrop(null)
     setMobileOpen(false)
   }

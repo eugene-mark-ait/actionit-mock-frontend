@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { scrollToHash } from '../lib/scrollToHash'
 
 const productLinks = [
   { href: '#product', label: 'Features' },
@@ -13,18 +14,18 @@ const legalLinks = [
 ]
 
 const industries = [
-  { href: '/industries/legal', label: 'Legal' },
-  { href: '/industries/healthcare', label: 'Healthcare' },
-  { href: '/industries/consulting', label: 'Consulting' },
-  { href: '/industries/sales', label: 'Sales' },
-  { href: '/industries/enterprise', label: 'Enterprise' },
+  { href: '/industries#legal', label: 'Legal' },
+  { href: '/industries#healthcare', label: 'Healthcare' },
+  { href: '/industries#consulting', label: 'Consulting' },
+  { href: '/industries#sales', label: 'Sales' },
+  { href: '/industries#enterprise', label: 'Enterprise' },
 ]
 
 const featureLinks = [
-  { href: '/features/dataless-architecture', label: 'Dataless Architecture' },
-  { href: '/features/automatic-meeting-joining', label: 'Automatic Joining' },
-  { href: '/features/speaker-diarization', label: 'Speaker Diarization' },
-  { href: '/features/notion-integration', label: 'Notion Integration' },
+  { href: '/features#dataless-architecture', label: 'Dataless Architecture' },
+  { href: '/features#automatic-meeting-joining', label: 'Automatic Joining' },
+  { href: '/features#speaker-diarization', label: 'Speaker Diarization' },
+  { href: '/features#notion-integration', label: 'Notion Integration' },
 ]
 
 export function Footer() {
@@ -36,7 +37,7 @@ export function Footer() {
     if (!href.startsWith('#')) return
     e.preventDefault()
     if (isHome) {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      scrollToHash(href)
     } else {
       void navigate({ pathname: '/', hash: href.slice(1) })
     }

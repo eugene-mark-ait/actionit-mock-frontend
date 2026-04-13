@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { scrollToHash } from '../lib/scrollToHash'
 import { Navbar } from '../components/Navbar'
 import { Hero, HeroFirstViewportBackdrop } from '../components/Hero'
 import {
@@ -17,12 +18,10 @@ export function HomePage() {
   const location = useLocation()
 
   useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.slice(1)
-      requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      })
-    }
+    if (!location.hash) return
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => scrollToHash(location.hash))
+    })
   }, [location.hash])
 
   return (

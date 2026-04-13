@@ -62,7 +62,7 @@ export function ProductSection() {
     <section
       id="product"
       ref={ref as React.RefObject<HTMLElement>}
-      className="relative py-14 lg:py-20 bg-white overflow-hidden scroll-mt-20"
+      className="relative py-14 lg:py-20 bg-white overflow-hidden scroll-mt-28"
     >
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[1]"
@@ -132,7 +132,7 @@ export function PartnerMarqueeSection() {
   return (
     <section
       id="logo-cloud"
-      className="relative block w-full min-h-[220px] bg-white overflow-hidden md:min-h-0 scroll-mt-20"
+      className="relative block w-full min-h-[220px] bg-white overflow-hidden md:min-h-0 scroll-mt-28"
     >
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[1]"
@@ -165,12 +165,11 @@ export function PillarsSection() {
   const { ref, visible } = useInViewOnce()
   return (
     <section
-      id="pillars"
+      id="security"
       ref={ref}
-      className="relative py-14 lg:py-20 overflow-hidden scroll-mt-20"
+      className="relative py-14 lg:py-20 overflow-hidden scroll-mt-28"
       style={{ backgroundColor: '#F8F9FA' }}
     >
-      <div id="security" className="absolute top-24 scroll-mt-28" aria-hidden />
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-24">
         <div className="text-center mb-10">
           <h2
@@ -232,7 +231,7 @@ export function HowItWorksSection() {
     <section
       id="how-it-works"
       ref={ref}
-      className="relative py-14 lg:py-20 bg-neutral-50 overflow-hidden scroll-mt-20"
+      className="relative py-14 lg:py-20 bg-neutral-50 overflow-hidden scroll-mt-28"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-24">
         <div className="text-center mb-10">
@@ -343,7 +342,7 @@ const workflowPhases = [
 
 export function DemoSection() {
   return (
-    <div id="demo" className="scroll-mt-20">
+    <div id="demo" className="scroll-mt-28">
       <section className="relative isolate overflow-hidden bg-white px-6 sm:px-10 md:px-16 lg:px-24 py-14 sm:py-20 lg:overflow-visible">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
           <div className="lg:pr-4 lg:max-w-xl">
@@ -417,7 +416,7 @@ export function IntegrationsSection() {
     <section
       id="integrations"
       ref={ref}
-      className="relative py-14 lg:py-20 bg-white overflow-hidden scroll-mt-20"
+      className="relative py-14 lg:py-20 bg-white overflow-hidden scroll-mt-28"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-24">
         <div className="text-center mb-10">
@@ -468,7 +467,7 @@ export function IntegrationsSection() {
 
 export function FAQSection() {
   return (
-    <section id="faq" className="relative bg-neutral-50 overflow-hidden scroll-mt-20">
+    <section id="faq" className="relative bg-neutral-50 overflow-hidden scroll-mt-28">
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[1]"
         style={{ background: 'linear-gradient(to bottom, rgb(248 250 252), rgba(248,250,252,0.4))' }}

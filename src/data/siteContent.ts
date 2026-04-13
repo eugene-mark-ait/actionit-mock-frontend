@@ -99,16 +99,16 @@ export const navProductLinks = [
 ] as const
 
 export const navIndustries = [
-  { href: '/industries/legal', label: 'Legal' },
-  { href: '/industries/healthcare', label: 'Healthcare' },
-  { href: '/industries/consulting', label: 'Consulting' },
-  { href: '/industries/sales', label: 'Sales' },
-  { href: '/industries/enterprise', label: 'Enterprise' },
+  { href: '/industries#legal', label: 'Legal' },
+  { href: '/industries#healthcare', label: 'Healthcare' },
+  { href: '/industries#consulting', label: 'Consulting' },
+  { href: '/industries#sales', label: 'Sales' },
+  { href: '/industries#enterprise', label: 'Enterprise' },
 ] as const
 
 export const navFeatures = [
-  { href: '/features/dataless-architecture', label: 'Dataless Architecture' },
-  { href: '/features/automatic-meeting-joining', label: 'Automatic Joining' },
-  { href: '/features/speaker-diarization', label: 'Speaker Diarization' },
-  { href: '/features/notion-integration', label: 'Notion Integration' },
+  { href: '/features#dataless-architecture', label: 'Dataless Architecture' },
+  { href: '/features#automatic-meeting-joining', label: 'Automatic Joining' },
+  { href: '/features#speaker-diarization', label: 'Speaker Diarization' },
+  { href: '/features#notion-integration', label: 'Notion Integration' },
 ] as const
