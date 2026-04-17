@@ -18,6 +18,8 @@ export function Navbar() {
   const router = useRouter()
   const isHome = pathname === '/'
   const [mobileOpen, setMobileOpen] = useState(false)
+  /** Mobile / tablet drawer: which nav group is expanded (accordion — one at a time, default all collapsed). */
+  const [mobileSection, setMobileSection] = useState<'product' | 'industries' | 'features' | null>(null)
   const [openDrop, setOpenDrop] = useState<'product' | 'industries' | 'features' | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -30,6 +32,7 @@ export function Navbar() {
       router.push(`/#${href.slice(1)}`)
     }
     setOpenDrop(null)
+    setMobileSection(null)
     setMobileOpen(false)
   }
 
@@ -44,20 +47,25 @@ export function Navbar() {
       router.push(path)
     }
     setOpenDrop(null)
+    setMobileSection(null)
     setMobileOpen(false)
+  }
+
+  const toggleMobileSection = (section: 'product' | 'industries' | 'features') => {
+    setMobileSection((prev) => (prev === section ? null : section))
   }
 
   return (
     <header className="sticky top-0 z-[200] w-full min-w-0 shrink-0 pointer-events-none bg-transparent">
       <div className="mx-auto w-full max-w-7xl px-4 pt-3 pb-3 sm:px-6 md:px-10 md:pt-4 md:pb-4 lg:px-16 xl:px-24">
         <nav
-          className="pointer-events-auto flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-white/55 bg-white/65 px-3 py-2.5 shadow-[0_2px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/[0.58] sm:gap-4 sm:px-4 md:px-6"
+          className="pointer-events-auto flex min-w-0 items-center justify-between gap-2 rounded-2xl border border-white/55 bg-white/65 px-2.5 py-2.5 shadow-[0_2px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/[0.58] sm:gap-3 sm:px-4 md:gap-4 md:px-6"
           aria-label="Global navigation"
         >
-          <div className="flex min-w-0 shrink-0 items-center gap-2">
+          <div className="flex min-w-0 flex-1 items-center">
             <Link
               href="/"
-              className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 shrink-0"
+              className="flex min-w-0 max-w-full flex-1 items-center gap-1.5 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 sm:gap-2"
               aria-label="actionit.ai Home"
             >
               <SiteImage
@@ -65,14 +73,14 @@ export function Navbar() {
                 alt="actionit.ai logo"
                 width={40}
                 height={40}
-                className="rounded-md"
+                className="h-8 w-8 shrink-0 rounded-md sm:h-10 sm:w-10"
                 priority
               />
-              <BrandWordmark className="font-navbar-mark hidden text-lg font-semibold tracking-tight sm:inline md:text-xl" />
+              <BrandWordmark className="font-navbar-mark block min-w-0 flex-1 truncate text-sm font-semibold leading-tight tracking-tight sm:text-base md:text-xl" />
             </Link>
           </div>
 
-          <div className="hidden md:flex md:min-w-0 md:items-center md:gap-1">
+          <div className="hidden lg:flex lg:min-w-0 lg:items-center lg:gap-1">
             <div
               className="relative"
               onMouseEnter={() => {
@@ -213,9 +221,15 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-lg p-2 text-zinc-900 hover:bg-black/[0.06] md:hidden"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-zinc-900 hover:bg-black/[0.06] lg:hidden"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            onClick={() => setMobileOpen((v) => !v)}
+            onClick={() => {
+              setMobileOpen((v) => {
+                const next = !v
+                if (!next) setMobileSection(null)
+                return next
+              })
+            }}
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -224,62 +238,128 @@ export function Navbar() {
         {mobileOpen && (
           <div
             className={cn(
-              'pointer-events-auto mt-2 p-4 md:hidden',
+              'pointer-events-auto mt-2 p-3 sm:p-4 lg:hidden',
               dropdownPanelClass,
               'rounded-2xl border-zinc-800/80',
             )}
           >
-            <div className="flex flex-col gap-1">
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide px-2 pt-1">Product</p>
-              {navProductLinks.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-lg px-2 py-2 font-medium text-zinc-100 hover:bg-white/12"
-                  onClick={(e) => handleHashLink(e, item.href)}
-                >
-                  {item.label}
-                </a>
-              ))}
-              <hr className="border-white/15 my-2" />
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide px-2">Industries</p>
-              {navIndustries.map((item) => (
+            <div className="flex flex-col">
+              <div className="border-b border-white/10">
                 <button
-                  key={item.href}
                   type="button"
-                  className="rounded-lg px-2 py-2 text-left text-zinc-100 hover:bg-white/12"
-                  onClick={() => handleRoute(item.href)}
+                  className="flex w-full items-center justify-between gap-2 rounded-lg px-2 py-3 text-left text-sm font-semibold text-zinc-100 hover:bg-white/10"
+                  aria-expanded={mobileSection === 'product'}
+                  onClick={() => toggleMobileSection('product')}
                 >
-                  {item.label}
+                  <span>Product</span>
+                  <ChevronDown
+                    className={cn(
+                      'h-5 w-5 shrink-0 text-zinc-400 transition-transform duration-200',
+                      mobileSection === 'product' && 'rotate-180',
+                    )}
+                    aria-hidden
+                  />
                 </button>
-              ))}
-              <hr className="border-white/15 my-2" />
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide px-2">Features</p>
-              {navFeatures.map((item) => (
+                {mobileSection === 'product' && (
+                  <div className="space-y-0.5 pb-3 pl-1">
+                    {navProductLinks.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className="block rounded-lg px-2 py-2.5 text-sm font-medium text-zinc-100 hover:bg-white/12"
+                        onClick={(e) => handleHashLink(e, item.href)}
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="border-b border-white/10">
                 <button
-                  key={item.href}
                   type="button"
-                  className="rounded-lg px-2 py-2 text-left text-zinc-100 hover:bg-white/12"
-                  onClick={() => handleRoute(item.href)}
+                  className="flex w-full items-center justify-between gap-2 rounded-lg px-2 py-3 text-left text-sm font-semibold text-zinc-100 hover:bg-white/10"
+                  aria-expanded={mobileSection === 'industries'}
+                  onClick={() => toggleMobileSection('industries')}
                 >
-                  {item.label}
+                  <span>Industries</span>
+                  <ChevronDown
+                    className={cn(
+                      'h-5 w-5 shrink-0 text-zinc-400 transition-transform duration-200',
+                      mobileSection === 'industries' && 'rotate-180',
+                    )}
+                    aria-hidden
+                  />
                 </button>
-              ))}
-              <hr className="border-white/15 my-2" />
+                {mobileSection === 'industries' && (
+                  <div className="space-y-0.5 pb-3 pl-1">
+                    {navIndustries.map((item) => (
+                      <button
+                        key={item.href}
+                        type="button"
+                        className="w-full rounded-lg px-2 py-2.5 text-left text-sm text-zinc-100 hover:bg-white/12"
+                        onClick={() => handleRoute(item.href)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="border-b border-white/10">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-2 rounded-lg px-2 py-3 text-left text-sm font-semibold text-zinc-100 hover:bg-white/10"
+                  aria-expanded={mobileSection === 'features'}
+                  onClick={() => toggleMobileSection('features')}
+                >
+                  <span>Features</span>
+                  <ChevronDown
+                    className={cn(
+                      'h-5 w-5 shrink-0 text-zinc-400 transition-transform duration-200',
+                      mobileSection === 'features' && 'rotate-180',
+                    )}
+                    aria-hidden
+                  />
+                </button>
+                {mobileSection === 'features' && (
+                  <div className="space-y-0.5 pb-3 pl-1">
+                    {navFeatures.map((item) => (
+                      <button
+                        key={item.href}
+                        type="button"
+                        className="w-full rounded-lg px-2 py-2.5 text-left text-sm text-zinc-100 hover:bg-white/12"
+                        onClick={() => handleRoute(item.href)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <Link
                 href="/pricing"
                 className={cn(
-                  'rounded-lg px-2 py-2 font-medium',
+                  'rounded-lg px-2 py-3 text-sm font-medium',
                   pathname === '/pricing' ? 'bg-white/15 text-brand-bright' : 'text-zinc-100 hover:bg-white/12',
                 )}
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  setMobileSection(null)
+                  setMobileOpen(false)
+                }}
               >
                 Pricing
               </Link>
               <Link
                 href="/login"
-                className="mt-3 inline-flex justify-center rounded-full py-3 font-semibold bg-[#00B4D8] text-white"
-                onClick={() => setMobileOpen(false)}
+                className="mt-2 inline-flex justify-center rounded-full py-3 text-sm font-semibold bg-[#00B4D8] text-white"
+                onClick={() => {
+                  setMobileSection(null)
+                  setMobileOpen(false)
+                }}
               >
                 Get Started
               </Link>
