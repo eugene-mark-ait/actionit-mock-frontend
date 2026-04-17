@@ -1,5 +1,8 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, Shield, Zap, Brain } from 'lucide-react'
+import { SiteImage } from '@/components/SiteImage'
 import { cn } from '../lib/cn'
 import {
   faqItems,
@@ -35,11 +38,14 @@ function PartnerLogoMarquee() {
   const renderStrip = (suffix: 'a' | 'b') => (
     <div className="flex items-center gap-16 sm:gap-20 md:gap-24 shrink-0 pr-16 sm:pr-20">
       {partnerLogos.map((p) => (
-        <img
+        <SiteImage
           key={`${p.src}-${suffix}`}
           src={p.src}
           alt={suffix === 'a' ? p.alt : ''}
-          className="h-10 sm:h-12 w-auto max-w-[160px] object-contain opacity-90 hover:opacity-100 transition-opacity"
+          width={160}
+          height={48}
+          sizes="160px"
+          className="h-10 sm:h-12 w-auto max-w-[160px] object-contain opacity-90 transition-opacity hover:opacity-100"
         />
       ))}
     </div>
@@ -62,16 +68,11 @@ export function ProductSection() {
     <section
       id="product"
       ref={ref as React.RefObject<HTMLElement>}
-      className="relative py-14 lg:py-20 bg-white overflow-hidden scroll-mt-28"
+      className="relative overflow-hidden scroll-mt-28 bg-surface py-14 lg:py-20"
     >
       <div
-        className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[1]"
-        style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.7), transparent)' }}
-        aria-hidden
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none z-[1]"
-        style={{ background: 'linear-gradient(to bottom, transparent, #F8F9FA)' }}
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-[1] h-28"
+        style={{ background: 'linear-gradient(to bottom, transparent, var(--color-slate-section))' }}
         aria-hidden
       />
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-24">
@@ -132,16 +133,20 @@ export function PartnerMarqueeSection() {
   return (
     <section
       id="logo-cloud"
-      className="relative block w-full min-h-[220px] bg-white overflow-hidden md:min-h-0 scroll-mt-28"
+      className="relative block min-h-[220px] w-full overflow-hidden scroll-mt-28 bg-surface md:min-h-0"
     >
       <div
-        className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[1]"
-        style={{ background: 'linear-gradient(to bottom, #F8F9FA, #ffffff)' }}
+        className="pointer-events-none absolute left-0 right-0 top-0 z-[1] h-24"
+        style={{
+          background: 'linear-gradient(to bottom, var(--color-slate-section), var(--color-surface))',
+        }}
         aria-hidden
       />
       <div
-        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none z-[1]"
-        style={{ background: 'linear-gradient(to bottom, transparent, #F8F9FA)' }}
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-[1] h-28"
+        style={{
+          background: 'linear-gradient(to bottom, transparent, var(--color-slate-section))',
+        }}
         aria-hidden
       />
       <div className="flex min-h-[200px] flex-shrink-0 py-16 lg:py-24 items-center justify-center px-6 w-full">
@@ -167,8 +172,7 @@ export function PillarsSection() {
     <section
       id="security"
       ref={ref}
-      className="relative py-14 lg:py-20 overflow-hidden scroll-mt-28"
-      style={{ backgroundColor: '#F8F9FA' }}
+      className="relative scroll-mt-28 overflow-hidden bg-section-soft py-14 lg:py-20"
     >
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-24">
         <div className="text-center mb-10">
@@ -231,7 +235,7 @@ export function HowItWorksSection() {
     <section
       id="how-it-works"
       ref={ref}
-      className="relative py-14 lg:py-20 bg-neutral-50 overflow-hidden scroll-mt-28"
+      className="relative scroll-mt-28 overflow-hidden bg-section-soft py-14 lg:py-20"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-24">
         <div className="text-center mb-10">
@@ -399,10 +403,12 @@ export function DemoSection() {
           <div className="lg:sticky lg:top-28 lg:col-start-2 lg:row-span-1 lg:row-start-1">
             <div className="overflow-hidden rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10">
               <div className="relative aspect-[4/3] bg-zinc-800">
-                <img
+                <SiteImage
                   src="/mockup.png"
                   alt="Action.IT dashboard and meeting intelligence preview"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) min(50vw, 42rem), 100vw"
                 />
               </div>
             </div>
@@ -454,7 +460,14 @@ export function IntegrationsSection() {
               )}
               style={{ transitionDelay: `${o * 50}ms` }}
             >
-              <img src={item.logo} alt={`${item.name} logo`} className="h-10 w-auto object-contain" />
+              <SiteImage
+                src={item.logo}
+                alt={`${item.name} logo`}
+                width={120}
+                height={40}
+                sizes="120px"
+                className="h-10 w-auto object-contain"
+              />
               {item.comingSoon && (
                 <span className="text-[10px] font-medium text-[#FF6B6B] uppercase tracking-wider mt-2">
                   Coming Soon
@@ -470,20 +483,15 @@ export function IntegrationsSection() {
 
 export function FAQSection() {
   return (
-    <section id="faq" className="relative bg-neutral-50 overflow-hidden scroll-mt-28">
-      <div
-        className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[1]"
-        style={{ background: 'linear-gradient(to bottom, rgb(248 250 252), rgba(248,250,252,0.4))' }}
-        aria-hidden
-      />
-      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+    <section id="faq" className="relative scroll-mt-28 overflow-hidden bg-page">
+      <div className="container mx-auto max-w-5xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <h2
           className="mb-4 text-3xl font-semibold md:mb-11 md:text-4xl text-[#0F172A]"
           style={{ fontFamily: "'Recoleta Light', sans-serif" }}
         >
           FAQ<span style={{ fontFamily: 'var(--font-body), sans-serif' }}>&apos;</span>s
         </h2>
-        <div className="divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-white px-2">
+        <div className="divide-y divide-zinc-200 rounded-xl border border-zinc-200 bg-surface px-2">
           {faqItems.map((item) => (
             <details key={item.id} className="group px-4 py-2">
               <summary className="cursor-pointer list-none py-4 text-base font-semibold text-neutral-800 text-left flex justify-between items-center gap-4">

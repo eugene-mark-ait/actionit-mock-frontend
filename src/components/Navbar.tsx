@@ -1,6 +1,11 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
+import { BrandWordmark } from '@/components/BrandWordmark'
+import { SiteImage } from '@/components/SiteImage'
 import { navFeatures, navIndustries, navProductLinks } from '../data/siteContent'
 import { cn } from '../lib/cn'
 import { scrollToHash as scrollToHashSmooth } from '../lib/scrollToHash'
@@ -9,9 +14,9 @@ const dropdownPanelClass =
   'rounded-xl border border-zinc-800/70 bg-zinc-950/92 backdrop-blur-xl shadow-xl shadow-black/40'
 
 export function Navbar() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const isHome = location.pathname === '/'
+  const pathname = usePathname()
+  const router = useRouter()
+  const isHome = pathname === '/'
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDrop, setOpenDrop] = useState<'product' | 'industries' | 'features' | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -22,7 +27,7 @@ export function Navbar() {
     if (isHome) {
       scrollToHashSmooth(href)
     } else {
-      void navigate({ pathname: '/', hash: href.slice(1) })
+      router.push(`/#${href.slice(1)}`)
     }
     setOpenDrop(null)
     setMobileOpen(false)
@@ -31,11 +36,12 @@ export function Navbar() {
   const handleRoute = (path: string) => {
     const hashIdx = path.indexOf('#')
     if (hashIdx !== -1) {
-      const pathname = path.slice(0, hashIdx) || '/'
+      const pathOnly = path.slice(0, hashIdx) || '/'
       const hashFrag = path.slice(hashIdx + 1)
-      void navigate({ pathname, hash: hashFrag || undefined })
+      const href = hashFrag ? `${pathOnly}#${hashFrag}` : pathOnly
+      router.push(href)
     } else {
-      void navigate(path)
+      router.push(path)
     }
     setOpenDrop(null)
     setMobileOpen(false)
@@ -45,29 +51,24 @@ export function Navbar() {
     <header className="sticky top-0 z-[200] w-full min-w-0 shrink-0 pointer-events-none bg-transparent">
       <div className="mx-auto w-full max-w-7xl px-4 pt-3 pb-3 sm:px-6 md:px-10 md:pt-4 md:pb-4 lg:px-16 xl:px-24">
         <nav
-          className="pointer-events-auto flex min-w-0 items-center justify-between gap-3 rounded-2xl border px-3 py-2.5 backdrop-blur-xl border-white/20 shadow-[0_2px_24px_rgba(0,0,0,0.12)] bg-black/[0.12] supports-[backdrop-filter]:bg-black/[0.08] sm:gap-4 sm:px-4 md:px-6"
+          className="pointer-events-auto flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-white/55 bg-white/65 px-3 py-2.5 shadow-[0_2px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/[0.58] sm:gap-4 sm:px-4 md:px-6"
           aria-label="Global navigation"
         >
           <div className="flex min-w-0 shrink-0 items-center gap-2">
             <Link
-              to="/"
-              className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]/40 shrink-0"
+              href="/"
+              className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 shrink-0"
               aria-label="actionit.ai Home"
             >
-              <img
+              <SiteImage
                 src="/ehanced_logo.png"
                 alt="actionit.ai logo"
                 width={40}
                 height={40}
                 className="rounded-md"
+                priority
               />
-              <span
-                className="text-lg md:text-xl font-semibold tracking-tight hidden sm:inline"
-                style={{ fontFamily: "'Recoleta Medium', var(--font-display), sans-serif" }}
-              >
-                <span className="text-[#2776EA]">actionit</span>
-                <span className="text-[#00B4D8]">.ai</span>
-              </span>
+              <BrandWordmark className="font-navbar-mark hidden text-lg font-semibold tracking-tight sm:inline md:text-xl" />
             </Link>
           </div>
 
@@ -84,7 +85,7 @@ export function Navbar() {
             >
               <button
                 type="button"
-                className="flex items-center gap-1 text-sm font-medium text-zinc-900/90 hover:text-zinc-950 px-3 py-2 rounded-md hover:bg-white/10"
+                className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-900/90 hover:bg-zinc-100 hover:text-zinc-950"
                 aria-expanded={openDrop === 'product'}
                 onClick={() => setOpenDrop((v) => (v === 'product' ? null : 'product'))}
               >
@@ -124,7 +125,7 @@ export function Navbar() {
             >
               <button
                 type="button"
-                className="flex items-center gap-1 text-sm font-medium text-zinc-900/90 hover:text-zinc-950 px-3 py-2 rounded-md hover:bg-white/10"
+                className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-900/90 hover:bg-zinc-100 hover:text-zinc-950"
                 aria-expanded={openDrop === 'industries'}
                 onClick={() => setOpenDrop((v) => (v === 'industries' ? null : 'industries'))}
               >
@@ -162,7 +163,7 @@ export function Navbar() {
             >
               <button
                 type="button"
-                className="flex items-center gap-1 text-sm font-medium text-zinc-900/90 hover:text-zinc-950 px-3 py-2 rounded-md hover:bg-white/10"
+                className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-900/90 hover:bg-zinc-100 hover:text-zinc-950"
                 aria-expanded={openDrop === 'features'}
                 onClick={() => setOpenDrop((v) => (v === 'features' ? null : 'features'))}
               >
@@ -187,11 +188,23 @@ export function Navbar() {
                 </div>
               )}
             </div>
+
+            <Link
+              href="/pricing"
+              className={cn(
+                'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                pathname === '/pricing'
+                  ? 'bg-brand-cyan/10 text-brand-cyan'
+                  : 'text-zinc-900/90 hover:bg-zinc-100 hover:text-zinc-950',
+              )}
+            >
+              Pricing
+            </Link>
           </div>
 
           <div className="hidden shrink-0 items-center gap-3 md:flex">
             <Link
-              to="/login"
+              href="/login"
               className="inline-flex items-center justify-center rounded-full min-h-[44px] px-6 py-2.5 text-sm font-semibold bg-[#00B4D8] text-white shadow-sm hover:bg-[#0ea5e9] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]"
             >
               Get Started
@@ -200,7 +213,7 @@ export function Navbar() {
 
           <button
             type="button"
-            className="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-zinc-900 hover:bg-white/10"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-zinc-900 hover:bg-black/[0.06] md:hidden"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMobileOpen((v) => !v)}
           >
@@ -252,8 +265,19 @@ export function Navbar() {
                   {item.label}
                 </button>
               ))}
+              <hr className="border-white/15 my-2" />
               <Link
-                to="/login"
+                href="/pricing"
+                className={cn(
+                  'rounded-lg px-2 py-2 font-medium',
+                  pathname === '/pricing' ? 'bg-white/15 text-brand-bright' : 'text-zinc-100 hover:bg-white/12',
+                )}
+                onClick={() => setMobileOpen(false)}
+              >
+                Pricing
+              </Link>
+              <Link
+                href="/login"
                 className="mt-3 inline-flex justify-center rounded-full py-3 font-semibold bg-[#00B4D8] text-white"
                 onClick={() => setMobileOpen(false)}
               >

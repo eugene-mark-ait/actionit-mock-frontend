@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 
 type Sequence = { text: string; deleteAfter?: boolean }

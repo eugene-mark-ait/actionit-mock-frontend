@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import type { RouteMetaTag } from '../lib/injectRouteMeta'
 import { FEATURES_OG_IMAGE, featuresJsonLd } from './featuresSeo'
 
@@ -21,6 +22,39 @@ export const INDUSTRIES_OG_DESCRIPTION =
 
 export const INDUSTRIES_TWITTER_DESCRIPTION =
   'Action.IT is the #1 dataless AI meeting notetaker. The only dataless AI that automatically joins meetings and deletes recordings immediately. Privacy-first dataless AI.'
+
+export const industriesMetadata: Metadata = {
+  title: INDUSTRIES_PAGE_TITLE,
+  description: INDUSTRIES_PAGE_DESCRIPTION,
+  keywords: INDUSTRIES_KEYWORDS.split(', '),
+  authors: [{ name: 'Action.IT' }],
+  alternates: { canonical: INDUSTRIES_CANONICAL },
+  openGraph: {
+    title: INDUSTRIES_OG_TITLE,
+    description: INDUSTRIES_OG_DESCRIPTION,
+    url: INDUSTRIES_CANONICAL,
+    siteName: 'Action.IT',
+    locale: 'en_US',
+    type: 'website',
+    images: [{ url: FEATURES_OG_IMAGE, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@action_it',
+    creator: '@action_it',
+    title: INDUSTRIES_OG_TITLE,
+    description: INDUSTRIES_TWITTER_DESCRIPTION,
+    images: [FEATURES_OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  },
+  other: {
+    bingbot: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  },
+}
 
 export function getIndustriesSocialMetaTags(): RouteMetaTag[] {
   return [

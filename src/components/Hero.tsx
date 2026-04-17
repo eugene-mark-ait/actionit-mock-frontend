@@ -1,7 +1,10 @@
+'use client'
+
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 import { Lock } from 'lucide-react'
+import { SiteImage } from '@/components/SiteImage'
 import { TypewriterSequences } from './TypewriterSequences'
 
 const heroTypingSequences = [
@@ -27,8 +30,7 @@ export function HeroFirstViewportBackdrop() {
       <div
         className="pointer-events-none absolute left-0 right-0 top-0 z-[1] h-[100dvh] w-full"
         style={{
-          background:
-            'linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.2) 60%, rgba(255, 255, 255, 0.5) 75%, rgba(255, 255, 255, 0.8) 90%, #FFFFFF 100%)',
+          background: `linear-gradient(to bottom, transparent 0%, transparent 40%, rgb(255 255 255 / 0.18) 60%, rgb(255 255 255 / 0.42) 75%, rgb(255 255 255 / 0.72) 90%, var(--color-page) 100%)`,
         }}
         aria-hidden
       />
@@ -53,9 +55,12 @@ export function Hero() {
   }, [])
 
   useEffect(() => {
-    onScroll()
+    const raf = requestAnimationFrame(() => onScroll())
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [onScroll])
 
   return (
@@ -69,66 +74,46 @@ export function Hero() {
           <div className="hidden min-w-0 lg:block lg:order-1" aria-hidden="false">
             <div className="hero-image-in">
               <div className="relative">
-                <div
-                  className="relative rounded-2xl p-2"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)',
-                    boxShadow:
-                      '0 25px 50px -12px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.2)',
-                  }}
-                >
-                  <div className="rounded-t-xl bg-white/80 backdrop-blur-md p-3 border-b border-zinc-200/50">
+                <div className="hero-mockup-shell relative rounded-2xl p-2">
+                  <div className="hero-mockup-chrome rounded-t-xl p-3">
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5">
-                        <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                        <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
-                        <div className="w-3 h-3 rounded-full bg-green-400/80" />
+                        <div className="h-3 w-3 rounded-full bg-red-400/80" />
+                        <div className="h-3 w-3 rounded-full bg-yellow-400/80" />
+                        <div className="h-3 w-3 rounded-full bg-green-400/80" />
                       </div>
-                      <div className="flex-1 mx-4">
-                        <div className="bg-zinc-100/50 rounded-md px-3 py-1.5 text-xs text-zinc-500 backdrop-blur-sm">
+                      <div className="mx-4 flex-1">
+                        <div className="rounded-md bg-zinc-300/35 px-3 py-1.5 text-xs text-zinc-600 backdrop-blur-sm">
                           app.actionit.ai/dashboard
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="relative aspect-[4/3] rounded-b-xl overflow-hidden">
-                    <img
+                    <SiteImage
                       src="/mockup.png"
                       alt="Dashboard interface preview"
-                      className="absolute inset-0 w-full h-full object-cover opacity-95"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover opacity-95"
                     />
                     <div
-                      className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/5"
+                      className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-page)]/25 via-transparent to-blue-500/5"
                       aria-hidden
                     />
-                    <div className="absolute top-4 right-4 space-y-2">
+                    <div className="absolute right-4 top-4 space-y-2">
                       <div
-                        className="animate-mockup-bounce p-3 rounded-lg"
-                        style={{
-                          animationDelay: '0s',
-                          background: 'rgba(255, 255, 255, 0.25)',
-                          backdropFilter: 'blur(12px)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)',
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                        }}
+                        className="hero-mockup-glass animate-mockup-bounce rounded-lg p-3"
+                        style={{ animationDelay: '0s' }}
                       >
                         <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                          <span className="text-xs font-semibold text-emerald-700">Active</span>
+                          <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                          <span className="text-xs font-semibold text-emerald-800">Active</span>
                         </div>
                       </div>
                       <div
-                        className="animate-mockup-bounce p-3 rounded-lg"
-                        style={{
-                          animationDelay: '0.25s',
-                          background: 'rgba(255, 255, 255, 0.25)',
-                          backdropFilter: 'blur(12px)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)',
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                        }}
+                        className="hero-mockup-glass animate-mockup-bounce rounded-lg p-3"
+                        style={{ animationDelay: '0.25s' }}
                       >
                         <div className="text-2xl font-bold text-zinc-800">12</div>
                         <div className="text-xs text-zinc-600">Meetings</div>
@@ -181,7 +166,7 @@ export function Hero() {
               style={{ opacity: trustOpacity, transition: 'opacity 150ms linear' }}
               aria-label="Trust signals"
             >
-              <span className="inline-flex items-center gap-2 rounded-full bg-neutral-200 px-4 py-2 text-sm text-neutral-700 shadow-sm">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-page/55 px-4 py-2 text-sm text-brand-navy shadow-sm backdrop-blur-md">
                 <span className="text-green-600" aria-hidden>
                   ✓
                 </span>
@@ -193,12 +178,7 @@ export function Hero() {
               </span>
             </div>
 
-            <h1
-              className="text-4xl font-extrabold leading-[1.05] text-white sm:text-5xl md:text-6xl drop-shadow-lg"
-              style={{
-                textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2)',
-              }}
-            >
+            <h1 className="text-hero-shadow text-4xl font-extrabold leading-[1.05] text-white drop-shadow-lg sm:text-5xl md:text-6xl">
               Your meetings in <br />
               <span className="text-black drop-shadow-sm">
                 <TypewriterSequences
@@ -216,34 +196,26 @@ export function Hero() {
                 Insights delivered,
                 <br />
                 data{' '}
-                <span
-                  className="text-white drop-shadow-md"
-                  style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.4)' }}
-                >
-                  deleted.
-                </span>
+                <span className="text-hero-word text-white drop-shadow-md">deleted.</span>
               </span>
             </h1>
 
-            <p
-              className="mx-auto mt-6 max-w-2xl text-base md:text-lg leading-8 text-white/95 lg:mx-0 drop-shadow-md"
-              style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.35)' }}
-            >
+            <p className="text-hero-subtle-shadow mx-auto mt-6 max-w-2xl text-base leading-8 text-white/95 drop-shadow-md md:text-lg lg:mx-0">
               An AI meeting assistant that joins your calls, posts summaries to your tools, then wipes
               the slate clean.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <Link
-                to="/login"
-                className="inline-flex items-center justify-center rounded-full min-h-[44px] px-8 py-3 text-sm font-semibold bg-[#00B4D8] text-white shadow-lg hover:bg-[#0ea5e9] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                href="/login"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-brand-cyan px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Start Free with actionit.ai"
               >
                 Get Started
               </Link>
               <a
                 href="#demo"
-                className="inline-flex items-center justify-center rounded-full min-h-[44px] px-6 py-3 text-sm font-semibold border border-white/25 bg-white/60 text-zinc-900 shadow-sm backdrop-blur-md hover:bg-white/80 transition"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/30 bg-page/70 px-6 py-3 text-sm font-semibold text-brand-navy shadow-sm backdrop-blur-md transition hover:bg-page/85"
               >
                 Watch Demo
               </a>

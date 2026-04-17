@@ -1,0 +1,264 @@
+@import 'tailwindcss';
+@plugin "tailwindcss-animate";
+
+@theme {
+  --font-display: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-wordmark: #2776ea;
+  --color-brand-cyan: #00b4d8;
+  --color-brand-bright: #00d4ff;
+  --color-brand-navy: #0f172a;
+  --color-page: #fafafa;
+  --color-slate-section: #f8f9fa;
+  /* Pure white surfaces (cards, elevated strips); use instead of mixing arbitrary #fff / #ffffff */
+  --color-surface: #ffffff;
+  /* shadcn semantic tokens (dashboard UI) */
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-ring: #a1a1aa;
+  --color-primary: #18181b;
+  --color-primary-foreground: #fafafa;
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #18181b;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+}
+
+@layer components {
+  /* Dashboard (ported from Vite): typography aliases */
+  .sf-display {
+    font-family: var(--font-display), 'Satoshi', system-ui, sans-serif;
+  }
+  .sf-text {
+    font-family: var(--font-body), 'Inter', system-ui, sans-serif;
+  }
+
+  .font-heading-recoleta {
+    font-family:
+      'Recoleta Light',
+      var(--font-display),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+  .font-navbar-mark {
+    font-family:
+      'Recoleta Medium',
+      var(--font-display),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+  .font-body-prose {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  }
+  .font-label-display {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  }
+  .bg-page {
+    background-color: var(--color-page);
+  }
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+  /* Slightly cooler band than page — use for alternating sections (was ad-hoc #F8F9FA) */
+  .bg-section-soft {
+    background-color: var(--color-slate-section);
+  }
+  .shadow-signin-card {
+    box-shadow:
+      0 25px 50px -12px rgb(15 23 42 / 0.12),
+      inset 0 0 0 1px rgb(255 255 255 / 0.5);
+  }
+  .text-hero-shadow {
+    text-shadow:
+      0 2px 8px rgb(0 0 0 / 0.3),
+      0 4px 16px rgb(0 0 0 / 0.2);
+  }
+  .text-hero-subtle-shadow {
+    text-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
+  }
+  .text-hero-word {
+    text-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+  }
+  /* Hero mockup: align “white” with site tokens (not stark #fff on photo) */
+  .hero-mockup-shell {
+    background: rgb(255 255 255 / 0.12);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    box-shadow:
+      0 25px 50px -12px rgb(0 0 0 / 0.15),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .hero-mockup-chrome {
+    background-color: rgb(250 250 250 / 0.88);
+    border-bottom: 1px solid rgb(228 228 231 / 0.55);
+    backdrop-filter: blur(12px);
+  }
+  .hero-mockup-glass {
+    background: rgb(250 250 250 / 0.22);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    overflow-x: clip;
+    min-width: 0;
+  }
+  body {
+    @apply antialiased bg-page text-neutral-900;
+    overflow-x: clip;
+    min-width: 0;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), 'Satoshi', system-ui, sans-serif;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@keyframes hero-bg-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-image-in {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) translate(0);
+  }
+  33% {
+    transform: translateY(-10px) translate(5px);
+  }
+  66% {
+    transform: translateY(5px) translate(-5px);
+  }
+}
+
+@keyframes mockup-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+.hero-bg-in {
+  animation: hero-bg-in 0.9s ease-out forwards;
+}
+
+.hero-text-in {
+  opacity: 0;
+  animation: hero-text-in 1s ease-out 0.6s forwards;
+}
+
+.hero-image-in {
+  opacity: 0;
+  animation: hero-image-in 1s ease-out 1.2s forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-mockup-bounce {
+  animation: mockup-bounce 2.75s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-in,
+  .hero-text-in,
+  .hero-image-in,
+  .animate-float,
+  .animate-mockup-bounce,
+  .animate-marquee {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+
+@keyframes partner-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-partner-marquee {
+  animation: partner-marquee 55s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-partner-marquee {
+    animation: none;
+  }
+}

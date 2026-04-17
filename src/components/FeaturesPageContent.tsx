@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import {
   ArrowRight,
   Bot,
@@ -20,18 +20,14 @@ import {
   Zap,
 } from 'lucide-react'
 
-const accent = '#00D4FF'
-const brand = '#00B4D8'
-const headingFont = "'Recoleta Light', var(--font-display), sans-serif"
-
 function CtaButton({ children }: { children: React.ReactNode }) {
   return (
     <Link
-      to="/login"
-      className="inline-flex items-center gap-2 h-14 px-10 text-base font-semibold rounded-xl transition-all duration-300 shadow-[0_0_30px_rgba(0,212,255,0.4)] bg-[#00D4FF] text-[#0A0A0A] hover:bg-white"
+      href="/login"
+      className="inline-flex h-14 items-center gap-2 rounded-xl bg-brand-bright px-10 text-base font-semibold text-neutral-950 shadow-[0_0_30px_rgba(0,212,255,0.4)] transition-all duration-300 hover:bg-surface"
     >
       {children}
-      <ArrowRight className="w-5 h-5" strokeWidth={2} />
+      <ArrowRight className="h-5 w-5" strokeWidth={2} />
     </Link>
   )
 }
@@ -41,33 +37,24 @@ export function FeaturesPageContent() {
     <>
       <section
         id="dataless-architecture"
-        className="relative scroll-mt-28 overflow-hidden bg-white py-24 lg:py-32"
+        className="relative scroll-mt-28 overflow-hidden bg-page py-24 lg:py-32"
       >
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center sm:px-8 lg:px-12">
-          <h1
-            className="mb-6 text-4xl font-bold text-[#0F172A] sm:text-5xl md:text-6xl lg:text-7xl"
-            style={{ fontFamily: headingFont }}
-          >
-            Dataless AI: <span style={{ color: accent }}>Privacy by Design</span>
+          <h1 className="font-heading-recoleta mb-6 text-4xl font-bold text-brand-navy sm:text-5xl md:text-6xl lg:text-7xl">
+            Dataless AI: <span className="text-brand-bright">Privacy by Design</span>
           </h1>
           <p className="mx-auto mb-6 max-w-2xl text-lg text-neutral-600 sm:text-xl">
-            <span className="font-bold" style={{ color: brand }}>
-              actionit.ai
-            </span>{' '}
-            is the #1 dataless AI meeting notetaker. Unlike other AI tools that store your data forever,
-            dataless AI processes and deletes recordings immediately. Privacy isn&apos;t a policy—it&apos;s
-            our dataless AI architecture.
+            <span className="font-bold text-brand-cyan">actionit.ai</span> is the #1 dataless AI meeting
+            notetaker. Unlike other AI tools that store your data forever, dataless AI processes and deletes
+            recordings immediately. Privacy isn&apos;t a policy—it&apos;s our dataless AI architecture.
           </p>
           <CtaButton>Experience Privacy-First Intelligence - Start Free</CtaButton>
         </div>
       </section>
 
-      <section className="bg-white py-24">
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             How Dataless AI Works
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -90,14 +77,14 @@ export function FeaturesPageContent() {
             ].map((s) => (
               <div
                 key={s.title}
-                className="rounded-xl border border-neutral-200 bg-neutral-50 p-8 text-center"
+                className="rounded-xl border border-neutral-200 bg-section-soft p-8 text-center"
               >
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#00D4FF]/20">
-                    <s.icon className="h-8 w-8 text-[#00D4FF]" strokeWidth={1.75} />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-bright/20">
+                    <s.icon className="h-8 w-8 text-brand-bright" strokeWidth={1.75} />
                   </div>
                 </div>
-                <h3 className="mb-3 text-xl font-semibold text-[#0F172A]">{s.title}</h3>
+                <h3 className="mb-3 text-xl font-semibold text-brand-navy">{s.title}</h3>
                 <p className="text-neutral-600">{s.body}</p>
               </div>
             ))}
@@ -105,12 +92,9 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             Benefits of Dataless AI
           </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -144,12 +128,12 @@ export function FeaturesPageContent() {
             ].map((b) => (
               <div
                 key={b.title}
-                className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm"
+                className="rounded-xl border border-neutral-200 bg-surface p-6 shadow-sm"
               >
                 <div className="flex items-start gap-4">
-                  <b.icon className="mt-1 h-8 w-8 shrink-0 text-[#00D4FF]" strokeWidth={1.75} />
+                  <b.icon className="mt-1 h-8 w-8 shrink-0 text-brand-bright" strokeWidth={1.75} />
                   <div>
-                    <h3 className="mb-2 text-lg font-semibold text-[#0F172A]">{b.title}</h3>
+                    <h3 className="mb-2 text-lg font-semibold text-brand-navy">{b.title}</h3>
                     <p className="text-neutral-600">{b.body}</p>
                   </div>
                 </div>
@@ -161,33 +145,24 @@ export function FeaturesPageContent() {
 
       <section
         id="automatic-meeting-joining"
-        className="relative scroll-mt-28 overflow-hidden bg-white py-24 lg:py-32"
+        className="relative scroll-mt-28 overflow-hidden bg-page py-24 lg:py-32"
       >
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center sm:px-8 lg:px-12">
-          <h1
-            className="mb-6 text-4xl font-bold text-[#0F172A] sm:text-5xl md:text-6xl lg:text-7xl"
-            style={{ fontFamily: headingFont }}
-          >
-            Automatic Meeting Joining:{' '}
-            <span style={{ color: accent }}>Zero Touch Required</span>
+          <h1 className="font-heading-recoleta mb-6 text-4xl font-bold text-brand-navy sm:text-5xl md:text-6xl lg:text-7xl">
+            Automatic Meeting Joining: <span className="text-brand-bright">Zero Touch Required</span>
           </h1>
           <p className="mx-auto mb-6 max-w-2xl text-lg text-neutral-600 sm:text-xl">
             Connect your calendar once.{' '}
-            <span className="font-bold" style={{ color: brand }}>
-              actionit.ai
-            </span>{' '}
-            automatically detects meetings and joins them. No buttons to click, no apps to open.
+            <span className="font-bold text-brand-cyan">actionit.ai</span> automatically detects meetings and
+            joins them. No buttons to click, no apps to open.
           </p>
           <CtaButton>Never Miss a Meeting Again - Start Free</CtaButton>
         </div>
       </section>
 
-      <section className="bg-white py-24">
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             How Automatic Meeting Joining Works
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -210,14 +185,14 @@ export function FeaturesPageContent() {
             ].map((s) => (
               <div
                 key={s.title}
-                className="rounded-xl border border-neutral-200 bg-neutral-50 p-8 text-center"
+                className="rounded-xl border border-neutral-200 bg-section-soft p-8 text-center"
               >
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#00D4FF]/20">
-                    <s.icon className="h-8 w-8 text-[#00D4FF]" strokeWidth={1.75} />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-bright/20">
+                    <s.icon className="h-8 w-8 text-brand-bright" strokeWidth={1.75} />
                   </div>
                 </div>
-                <h3 className="mb-3 text-xl font-semibold text-[#0F172A]">{s.title}</h3>
+                <h3 className="mb-3 text-xl font-semibold text-brand-navy">{s.title}</h3>
                 <p className="text-neutral-600">{s.body}</p>
               </div>
             ))}
@@ -225,22 +200,19 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             Supported Platforms
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {['Zoom', 'Google Meet', 'Microsoft Teams'].map((name) => (
               <div
                 key={name}
-                className="rounded-xl border border-neutral-200 bg-white p-8 text-center shadow-sm"
+                className="rounded-xl border border-neutral-200 bg-surface p-8 text-center shadow-sm"
               >
-                <CircleCheck className="mx-auto mb-4 h-10 w-10 text-[#00D4FF]" strokeWidth={1.75} />
-                <h3 className="mb-3 text-xl font-semibold text-[#0F172A]">{name}</h3>
+                <CircleCheck className="mx-auto mb-4 h-10 w-10 text-brand-bright" strokeWidth={1.75} />
+                <h3 className="mb-3 text-xl font-semibold text-brand-navy">{name}</h3>
                 <p className="text-neutral-600">Full support with automatic joining</p>
               </div>
             ))}
@@ -248,31 +220,22 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section id="speaker-diarization" className="relative scroll-mt-28 overflow-hidden bg-white py-24 lg:py-32">
+      <section id="speaker-diarization" className="relative scroll-mt-28 overflow-hidden bg-page py-24 lg:py-32">
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center sm:px-8 lg:px-12">
-          <h1
-            className="mb-6 text-4xl font-bold text-[#0F172A] sm:text-5xl md:text-6xl lg:text-7xl"
-            style={{ fontFamily: headingFont }}
-          >
-            Speaker Diarization: <span style={{ color: accent }}>Know Who Said What</span>
+          <h1 className="font-heading-recoleta mb-6 text-4xl font-bold text-brand-navy sm:text-5xl md:text-6xl lg:text-7xl">
+            Speaker Diarization: <span className="text-brand-bright">Know Who Said What</span>
           </h1>
           <p className="mx-auto mb-6 max-w-2xl text-lg text-neutral-600 sm:text-xl">
-            <span className="font-bold" style={{ color: brand }}>
-              actionit.ai
-            </span>{' '}
-            automatically identifies who said what in your meetings—no more guessing who owns that action
-            item.
+            <span className="font-bold text-brand-cyan">actionit.ai</span> automatically identifies who said what
+            in your meetings—no more guessing who owns that action item.
           </p>
           <CtaButton>Experience Accurate Attribution - Start Free</CtaButton>
         </div>
       </section>
 
-      <section className="bg-white py-24">
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             How Speaker Diarization Works
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -295,14 +258,14 @@ export function FeaturesPageContent() {
             ].map((s) => (
               <div
                 key={s.title}
-                className="rounded-xl border border-neutral-200 bg-neutral-50 p-8 text-center"
+                className="rounded-xl border border-neutral-200 bg-section-soft p-8 text-center"
               >
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#00D4FF]/20">
-                    <s.icon className="h-8 w-8 text-[#00D4FF]" strokeWidth={1.75} />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-bright/20">
+                    <s.icon className="h-8 w-8 text-brand-bright" strokeWidth={1.75} />
                   </div>
                 </div>
-                <h3 className="mb-3 text-xl font-semibold text-[#0F172A]">{s.title}</h3>
+                <h3 className="mb-3 text-xl font-semibold text-brand-navy">{s.title}</h3>
                 <p className="text-neutral-600">{s.body}</p>
               </div>
             ))}
@@ -310,12 +273,9 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             Benefits of Speaker Diarization
           </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -353,12 +313,12 @@ export function FeaturesPageContent() {
             ].map((b) => (
               <div
                 key={b.title}
-                className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm"
+                className="rounded-xl border border-neutral-200 bg-surface p-6 shadow-sm"
               >
                 <div className="flex items-start gap-4">
-                  <b.icon className="mt-1 h-8 w-8 shrink-0 text-[#00D4FF]" strokeWidth={1.75} />
+                  <b.icon className="mt-1 h-8 w-8 shrink-0 text-brand-bright" strokeWidth={1.75} />
                   <div>
-                    <h3 className="mb-2 text-lg font-semibold text-[#0F172A]">{b.title}</h3>
+                    <h3 className="mb-2 text-lg font-semibold text-brand-navy">{b.title}</h3>
                     <p className="text-neutral-600">{b.body}</p>
                   </div>
                 </div>
@@ -368,32 +328,24 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section id="notion-integration" className="relative scroll-mt-28 overflow-hidden bg-white py-24 lg:py-32">
+      <section id="notion-integration" className="relative scroll-mt-28 overflow-hidden bg-page py-24 lg:py-32">
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center sm:px-8 lg:px-12">
-          <h1
-            className="mb-6 text-4xl font-bold text-[#0F172A] sm:text-5xl md:text-6xl lg:text-7xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h1 className="font-heading-recoleta mb-6 text-4xl font-bold text-brand-navy sm:text-5xl md:text-6xl lg:text-7xl">
             Notion Integration:{' '}
-            <span style={{ color: accent }}>Meeting Notes Where You Work</span>
+            <span className="text-brand-bright">Meeting Notes Where You Work</span>
           </h1>
           <p className="mx-auto mb-6 max-w-2xl text-lg text-neutral-600 sm:text-xl">
             Connect your Notion workspace once.{' '}
-            <span className="font-bold" style={{ color: brand }}>
-              actionit.ai
-            </span>{' '}
-            automatically posts summaries, action items, and key decisions to your Notion pages.
+            <span className="font-bold text-brand-cyan">actionit.ai</span> automatically posts summaries, action
+            items, and key decisions to your Notion pages.
           </p>
           <CtaButton>Keep Your Notion Updated - Start Free</CtaButton>
         </div>
       </section>
 
-      <section className="bg-white py-24">
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             How Notion Integration Works
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -416,14 +368,14 @@ export function FeaturesPageContent() {
             ].map((s) => (
               <div
                 key={s.title}
-                className="rounded-xl border border-neutral-200 bg-neutral-50 p-8 text-center"
+                className="rounded-xl border border-neutral-200 bg-section-soft p-8 text-center"
               >
                 <div className="mb-4 flex justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#00D4FF]/20">
-                    <s.icon className="h-8 w-8 text-[#00D4FF]" strokeWidth={1.75} />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-bright/20">
+                    <s.icon className="h-8 w-8 text-brand-bright" strokeWidth={1.75} />
                   </div>
                 </div>
-                <h3 className="mb-3 text-xl font-semibold text-[#0F172A]">{s.title}</h3>
+                <h3 className="mb-3 text-xl font-semibold text-brand-navy">{s.title}</h3>
                 <p className="text-neutral-600">{s.body}</p>
               </div>
             ))}
@@ -431,12 +383,9 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: '#fafafa' }}>
+      <section className="bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-12 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-12 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             What Gets Posted to Notion
           </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -450,12 +399,12 @@ export function FeaturesPageContent() {
             ].map((b) => (
               <div
                 key={b.title}
-                className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm"
+                className="rounded-xl border border-neutral-200 bg-surface p-6 shadow-sm"
               >
                 <div className="flex items-start gap-4">
-                  <b.icon className="mt-1 h-8 w-8 shrink-0 text-[#00D4FF]" strokeWidth={1.75} />
+                  <b.icon className="mt-1 h-8 w-8 shrink-0 text-brand-bright" strokeWidth={1.75} />
                   <div>
-                    <h3 className="mb-2 text-lg font-semibold text-[#0F172A]">{b.title}</h3>
+                    <h3 className="mb-2 text-lg font-semibold text-brand-navy">{b.title}</h3>
                     <p className="text-neutral-600">{b.body}</p>
                   </div>
                 </div>
@@ -465,18 +414,15 @@ export function FeaturesPageContent() {
         </div>
       </section>
 
-      <section id="actionit-command" className="scroll-mt-28 bg-white py-24">
+      <section id="actionit-command" className="scroll-mt-28 bg-page py-24">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-          <h2
-            className="mb-6 text-center text-3xl font-bold text-[#0F172A] sm:text-4xl"
-            style={{ fontFamily: headingFont }}
-          >
+          <h2 className="font-heading-recoleta mb-6 text-center text-3xl font-bold text-brand-navy sm:text-4xl">
             Use /actionit Command
           </h2>
-          <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-8">
+          <div className="rounded-xl border border-neutral-200 bg-section-soft p-8">
             <p className="mb-4 text-lg text-neutral-600">
               Use the{' '}
-              <code className="rounded bg-[#00D4FF]/20 px-2 py-1 text-[#00D4FF]">/actionit</code> command in
+              <code className="rounded bg-brand-bright/20 px-2 py-1 text-brand-bright">/actionit</code> command in
               Notion to create meeting notes from any meeting.
             </p>
             <div className="mt-6 rounded-lg bg-zinc-900 p-4">
