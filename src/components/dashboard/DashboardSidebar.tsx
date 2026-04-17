@@ -280,7 +280,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#0099cb]/20 bg-white/95 text-slate-700 shadow-sm ring-1 ring-black/[0.03] transition-colors hover:border-[#0099cb]/40 hover:bg-white hover:text-[#0099cb] active:scale-[0.98]"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-700 transition-colors hover:bg-black/[0.06] hover:text-[#0099cb] active:scale-[0.98]"
             aria-label="Open menu"
           >
             <Menu className="h-[1.125rem] w-[1.125rem]" strokeWidth={2.25} aria-hidden />
