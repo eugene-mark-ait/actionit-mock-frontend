@@ -34,6 +34,11 @@ const INTEGRATIONS: IntegrationDef[] = [
   { id: 'odoo', name: 'Odoo', logoSrc: 'https://cdn.simpleicons.org/odoo/714B67' },
 ]
 
+/**
+ * Flip to `true` when disconnect is wired to real APIs; `toggle` below already supports both directions.
+ */
+const INTEGRATION_DISCONNECT_ENABLED = false
+
 function initialConnected(user: DashboardUser | null): Record<IntegrationId, boolean> {
   const base: Record<IntegrationId, boolean> = {
     'google-calendar': false,
@@ -45,9 +50,7 @@ function initialConnected(user: DashboardUser | null): Record<IntegrationId, boo
     trello: false,
     odoo: false,
   }
-  if (user?.recallCalendarStatus === 'connected') {
-    base['google-calendar'] = true
-  }
+  base['google-calendar'] = isGoogleCalendarConnected(user)
   return base
 }
 
@@ -68,6 +71,14 @@ export function DashboardIntegrationsSection({ user }: DashboardIntegrationsSect
   const toggle = useCallback((id: IntegrationId) => {
     setConnected((prev) => ({ ...prev, [id]: !prev[id] }))
   }, [])
+
+  const onIntegrationAction = useCallback(
+    (id: IntegrationId, isConnected: boolean) => {
+      if (isConnected && !INTEGRATION_DISCONNECT_ENABLED) return
+      toggle(id)
+    },
+    [toggle],
+  )
 
   const connectedCount = useMemo(
     () => INTEGRATIONS.reduce((n, i) => n + (connected[i.id] ? 1 : 0), 0),
@@ -144,13 +155,24 @@ export function DashboardIntegrationsSection({ user }: DashboardIntegrationsSect
                 type="button"
                 variant={isConnected ? 'outline' : 'default'}
                 size="sm"
+                disabled={isConnected && !INTEGRATION_DISCONNECT_ENABLED}
+                title={
+                  isConnected && !INTEGRATION_DISCONNECT_ENABLED
+                    ? 'Disconnect will be available soon'
+                    : undefined
+                }
                 className={cn(
                   'sf-text w-full sm:w-auto sm:self-start',
                   !isConnected &&
                     'border-0 bg-gradient-to-r from-[#0099cb] to-[#00c6f3] text-white shadow-sm hover:from-[#0088b8] hover:to-[#00b5e0] hover:text-white',
-                  isConnected && 'border-[#0099cb]/35 text-foreground hover:bg-muted/60',
+                  isConnected &&
+                    INTEGRATION_DISCONNECT_ENABLED &&
+                    'border-[#0099cb]/35 text-foreground hover:bg-muted/60',
+                  isConnected &&
+                    !INTEGRATION_DISCONNECT_ENABLED &&
+                    'cursor-not-allowed border-neutral-200 bg-muted/40 text-muted-foreground opacity-90 hover:bg-muted/40',
                 )}
-                onClick={() => toggle(item.id)}
+                onClick={() => onIntegrationAction(item.id, isConnected)}
               >
                 {isConnected ? 'Disconnect' : 'Connect'}
               </Button>

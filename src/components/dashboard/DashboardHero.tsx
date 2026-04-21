@@ -56,7 +56,7 @@ export function DashboardHero({ user, transcriptionLanguage }: DashboardHeroProp
         {greetingLine(user?.name)}
       </h1>
       <p className="sf-text relative mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
-        Meeting notes, integrations, and preferences — organized in one place so you can focus on the conversation.
+        Meeting notes, integrations, and preferences organized in one place so you can focus on the conversation.
       </p>
 
       <div className="relative mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">

@@ -299,6 +299,45 @@ export async function getLambdaOAuthStatus(userId: string): Promise<LambdaOAuthS
   return (await response.json()) as LambdaOAuthStatus
 }
 
+/** Response shape for POST `/oauth/refresh` — align with API Gateway Lambda implementation. */
+export interface LambdaOAuthRefreshResponse {
+  success?: boolean
+  access_token?: string
+  refresh_token?: string
+  expires_in?: number
+  error?: string
+}
+
+/**
+ * Refresh OAuth tokens via API Gateway Lambda (`POST /oauth/refresh`).
+ * Sends `userId` (required) and optional `refresh_token` when the client still holds one.
+ */
+export async function refreshLambdaOAuthTokens(params: {
+  userId: string
+  refreshToken?: string
+}): Promise<LambdaOAuthRefreshResponse> {
+  const API_BASE_URL = getLambdaOAuthApiBase()
+  const API_KEY = getLambdaOAuthApiKey()
+
+  const response = await fetch(`${API_BASE_URL}/oauth/refresh`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(API_KEY ? { 'x-api-key': API_KEY } : {}),
+    },
+    body: JSON.stringify({
+      userId: params.userId,
+      ...(params.refreshToken ? { refresh_token: params.refreshToken } : {}),
+    }),
+  })
+
+  const data = (await response.json().catch(() => ({}))) as LambdaOAuthRefreshResponse
+  if (!response.ok) {
+    throw new Error(data.error || `OAuth refresh failed (${response.status})`)
+  }
+  return data
+}
+
 export async function completeLambdaOAuthFlow(): Promise<string> {
   const result = await initiateLambdaOAuth()
 

@@ -44,7 +44,7 @@ export const howItWorksSteps = [
 
 export const integrations = [
   { name: 'Google Meet', logo: '/google.png', comingSoon: false },
-  { name: 'Salesforce', logo: '/salesforce.png', comingSoon: false },
+  { name: 'Salesforce', logo: '/Salesforce.png', comingSoon: false },
   { name: 'Microsoft Teams', logo: '/teams.png', comingSoon: false },
   { name: 'Notion', logo: '/notion-logo-no-background.png', comingSoon: false },
   { name: 'Zoom', logo: '/zoom.png', comingSoon: false },

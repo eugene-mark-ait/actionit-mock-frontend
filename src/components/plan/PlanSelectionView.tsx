@@ -7,7 +7,13 @@ import { PLAN_TIERS, type PlanCheckoutId } from '@/data/planTiers'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/cn'
-import { clearPendingPlanId, readPendingPlanId, setPendingPlanId, setPlanGateComplete } from '@/lib/plan-flow'
+import {
+  clearPendingPlanId,
+  paidPlanCheckoutIdFromSubscriptionTier,
+  readPendingPlanId,
+  setPendingPlanId,
+  setPlanGateComplete,
+} from '@/lib/plan-flow'
 import { buildStripeCheckoutUrl, redeemPromoCode } from '@/lib/billing-api'
 import { patchAuthSessionUser } from '@/lib/auth-session'
 import { useState } from 'react'
@@ -132,6 +138,7 @@ export function PlanSelectionView({ mode = 'default', className, onDone }: PlanS
   }
 
   const isUpgrade = mode === 'upgrade'
+  const linkedPaidPlan = isUpgrade ? paidPlanCheckoutIdFromSubscriptionTier(user?.subscriptionTier) : null
 
   return (
     <div className={cn('mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8', className)}>
@@ -168,21 +175,30 @@ export function PlanSelectionView({ mode = 'default', className, onDone }: PlanS
         {tiers.map((tier) => {
           const popular = tier.highlight === 'popular'
           const loading = busyId === tier.id
+          const isCurrentPlan = linkedPaidPlan !== null && tier.id === linkedPaidPlan
           return (
             <div
               key={tier.id}
               className={cn(
                 'relative flex w-full max-w-md flex-col justify-self-center rounded-2xl border bg-surface p-6 shadow-sm transition duration-300 sm:p-8',
                 isUpgrade && 'max-w-md',
-                popular
-                  ? 'border-brand-cyan/50 shadow-[0_8px_40px_-12px_rgba(0,180,216,0.35)] lg:z-10 lg:shadow-xl'
-                  : 'border-neutral-200 hover:border-neutral-300 hover:shadow-md',
+                isCurrentPlan && 'border-emerald-200/90 bg-neutral-50/80 shadow-sm',
+                !isCurrentPlan &&
+                  (popular
+                    ? 'border-brand-cyan/50 shadow-[0_8px_40px_-12px_rgba(0,180,216,0.35)] lg:z-10 lg:shadow-xl'
+                    : 'border-neutral-200 hover:border-neutral-300 hover:shadow-md'),
               )}
             >
-              {popular && (
-                <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-cyan px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-md">
-                  Most popular
+              {isCurrentPlan ? (
+                <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-emerald-600 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-md">
+                  Current plan
                 </div>
+              ) : (
+                popular && (
+                  <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-cyan px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-md">
+                    Most popular
+                  </div>
+                )
               )}
               <div className={cn('mb-6 text-center', popular && 'pt-2')}>
                 <h2 className="font-heading-recoleta text-2xl font-bold text-brand-navy">{tier.name}</h2>
@@ -219,16 +235,25 @@ export function PlanSelectionView({ mode = 'default', className, onDone }: PlanS
               ) : (
                 <button
                   type="button"
-                  disabled={loading}
+                  disabled={loading || isCurrentPlan}
                   onClick={() => void handlePaidSelect(tier.id)}
                   className={cn(
                     btnBase,
-                    popular
-                      ? 'bg-brand-bright text-neutral-950 shadow-[0_0_28px_rgba(0,212,255,0.35)] hover:bg-surface'
-                      : 'bg-brand-cyan text-white shadow-md hover:bg-sky-500',
+                    isCurrentPlan &&
+                      'cursor-not-allowed border border-neutral-200 bg-neutral-200 text-neutral-600 opacity-90 shadow-none hover:bg-neutral-200',
+                    !isCurrentPlan &&
+                      (popular
+                        ? 'bg-brand-bright text-neutral-950 shadow-[0_0_28px_rgba(0,212,255,0.35)] hover:bg-surface'
+                        : 'bg-brand-cyan text-white shadow-md hover:bg-sky-500'),
                   )}
                 >
-                  {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Start free trial'}
+                  {loading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : isCurrentPlan ? (
+                    'Your current plan'
+                  ) : (
+                    'Start free trial'
+                  )}
                 </button>
               )}
             </div>

@@ -403,13 +403,18 @@ export function DemoSection() {
           <div className="lg:sticky lg:top-28 lg:col-start-2 lg:row-span-1 lg:row-start-1">
             <div className="overflow-hidden rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10">
               <div className="relative aspect-[4/3] bg-zinc-800">
-                <SiteImage
-                  src="/mockup.png"
-                  alt="Action.IT dashboard and meeting intelligence preview"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) min(50vw, 42rem), 100vw"
-                />
+                <video
+                  className="absolute inset-0 h-full w-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  preload="metadata"
+                  aria-label="Action.IT launch video"
+                >
+                  <source src="/Actionit-Launch-Video.mov" type="video/quicktime" />
+                </video>
               </div>
             </div>
           </div>

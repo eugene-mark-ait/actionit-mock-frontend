@@ -12,6 +12,8 @@ import { useRouter, usePathname } from 'next/navigation'
 import type { DashboardUser } from '@/types/user'
 import {
   readAuthSession,
+  readAuthSessionIncludingExpired,
+  patchAuthSessionTokens,
   writeAuthSession,
   clearAuthSessionStorage,
   syncPresenceCookieFromSession,
@@ -23,11 +25,12 @@ import {
   buildLegacyGoogleAuthorizeUrl,
   buildPublicClientIdGoogleAuthorizeUrl,
   shouldUseLambdaOAuthSignIn,
+  refreshLambdaOAuthTokens,
   clearOAuthLoginFlow,
   clearOAuthStateStorage,
   canSignInWithPublicGoogleClient,
 } from '@/lib/lambda-oauth'
-import { revokeToken } from '@/lib/google-oauth'
+import { revokeToken, refreshAccessToken } from '@/lib/google-oauth'
 import { clearGoogleOAuthStorage } from '@/lib/google-oauth'
 import { loginWithPasswordApi, signUpWithPasswordApi } from '@/lib/auth-api'
 import { resolvePostAuthDestination } from '@/lib/post-auth-plan-navigation'
@@ -104,6 +107,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [lambdaOAuthSignIn])
 
   const refreshSession = useCallback(async () => {
+    const forceLambdaRefresh =
+      typeof process !== 'undefined' && process.env.NEXT_PUBLIC_FORCE_LAMBDA_OAUTH === 'true'
+
+    /** Near-expiry or expired access token — refresh flow may run (Lambda and/or `/api/auth/refresh`). */
+    const sessionNeedsTokenRefresh = (raw: AuthSessionPayload): boolean => {
+      if (!raw.access_token?.trim()) return true
+      return raw.expires_at <= Date.now() + 120_000
+    }
+
+    if (forceLambdaRefresh) {
+      const raw = readAuthSessionIncludingExpired()
+      if (
+        raw?.user?.id &&
+        raw.access_token !== 'demo-local' &&
+        sessionNeedsTokenRefresh(raw)
+      ) {
+        try {
+          const refreshed = await refreshLambdaOAuthTokens({
+            userId: raw.user.id,
+            refreshToken: raw.refresh_token,
+          })
+          const access = refreshed.access_token?.trim()
+          if (access) {
+            const ttlMs =
+              typeof refreshed.expires_in === 'number' && refreshed.expires_in > 0
+                ? refreshed.expires_in * 1000
+                : 3_600_000
+            patchAuthSessionTokens(
+              access,
+              refreshed.refresh_token ?? raw.refresh_token,
+              ttlMs,
+            )
+            setSession(readAuthSession())
+            return
+          }
+        } catch {
+          /* try Next route refresh below when refresh_token exists */
+        }
+
+        if (raw.refresh_token?.trim()) {
+          try {
+            const tokens = await refreshAccessToken(raw.refresh_token)
+            const ttlMs =
+              typeof tokens.expires_in === 'number' && tokens.expires_in > 0
+                ? tokens.expires_in * 1000
+                : 3_600_000
+            patchAuthSessionTokens(
+              tokens.access_token,
+              tokens.refresh_token ?? raw.refresh_token,
+              ttlMs,
+            )
+            setSession(readAuthSession())
+            return
+          } catch {
+            /* fall through — readAuthSession may clear expired session */
+          }
+        }
+      }
+    }
+
     const s = readAuthSession()
     setSession(s)
   }, [])

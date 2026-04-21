@@ -48,9 +48,6 @@ export function UpgradePlanDialog({
       <DialogContent className="flex max-h-[min(92vh,920px)] w-[calc(100vw-1.25rem)] max-w-6xl flex-col overflow-hidden border-[#0099cb]/20 bg-card p-0 sm:w-full sm:max-w-6xl">
         <div className="overflow-y-auto px-4 py-6 sm:px-8 sm:py-8">
           <DialogHeader className="space-y-1 text-center sm:text-center">
-            <DialogTitle className="mx-auto max-w-xl font-heading-recoleta text-xl text-brand-navy sm:text-2xl">
-              Upgrade or change plan
-            </DialogTitle>
           </DialogHeader>
           <PlanSelectionView mode="upgrade" onDone={() => setOpen(false)} className="mx-auto max-w-5xl px-0 pt-4" />
         </div>

@@ -91,6 +91,21 @@ export function isPaidPlan(plan: PlanCheckoutId): boolean {
 }
 
 /**
+ * Maps stored `subscriptionTier` (session / API) to a paid plan card id for upgrade UI.
+ * Returns null for free, unknown, or empty values so no card is incorrectly disabled.
+ */
+export function paidPlanCheckoutIdFromSubscriptionTier(
+  tier: string | undefined | null,
+): Exclude<PlanCheckoutId, 'free'> | null {
+  if (!tier?.trim()) return null
+  const t = tier.trim().toLowerCase()
+  if (t === 'free') return null
+  if (t === 'business' || t === 'team') return 'business'
+  if (t === 'professional' || t === 'pro' || t === 'paid' || t === 'vip') return 'professional'
+  return null
+}
+
+/**
  * If sessionStorage still holds a paid plan from a prior visit but the user did not open `/login?plan=…`
  * in this flow, drop it so post-auth does not redirect to checkout.
  */

@@ -11,6 +11,7 @@
 import {
   patchAuthSessionTokens,
   readAuthSession,
+  readAuthSessionIncludingExpired,
   clearAuthSessionStorage,
   clearAuthPresenceCookie,
 } from '@/lib/auth-session'
@@ -46,8 +47,8 @@ function bearerAllowed(token: string): boolean {
 }
 
 async function refreshViaNextRoute(): Promise<boolean> {
-  const session = readAuthSession()
-  if (!session?.refresh_token) return false
+  const session = readAuthSessionIncludingExpired()
+  if (!session?.refresh_token?.trim()) return false
 
   try {
     const res = await fetch('/api/auth/refresh', {

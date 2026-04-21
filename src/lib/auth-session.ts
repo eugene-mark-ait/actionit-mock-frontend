@@ -40,6 +40,25 @@ export function readAuthSession(): AuthSessionPayload | null {
   }
 }
 
+/**
+ * Same stored session but does **not** clear storage when past `expires_at`.
+ * Used for token refresh so `refresh_token` remains readable after access token expiry.
+ */
+export function readAuthSessionIncludingExpired(): AuthSessionPayload | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(AUTH_SESSION_KEY)
+    if (!raw) return null
+    const data = JSON.parse(raw) as AuthSessionPayload
+    if (!data?.user?.id || !data.expires_at) {
+      return null
+    }
+    return data
+  } catch {
+    return null
+  }
+}
+
 /** Non-httpOnly cookie so middleware can hint “logged in” without reading localStorage. */
 export function setAuthPresenceCookie(maxAgeSeconds: number): void {
   if (typeof document === 'undefined') return
@@ -90,8 +109,8 @@ export function patchAuthSessionUser(updates: Partial<DashboardUser>): void {
 }
 
 export function patchAuthSessionTokens(access_token: string, refresh_token?: string, ttlMs = 3_600_000): void {
-  const cur = readAuthSession()
-  if (!cur) return
+  const cur = readAuthSessionIncludingExpired()
+  if (!cur?.user) return
   writeAuthSession({
     user: cur.user,
     access_token,
