@@ -5,6 +5,7 @@ import { Plug2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import type { DashboardUser } from '@/context/AuthContext'
+import { isGoogleCalendarConnected } from '@/lib/google-calendar-integration'
 
 export type IntegrationId =
   | 'google-calendar'
@@ -60,9 +61,9 @@ export function DashboardIntegrationsSection({ user }: DashboardIntegrationsSect
   useEffect(() => {
     setConnected((prev) => ({
       ...prev,
-      'google-calendar': user?.recallCalendarStatus === 'connected',
+      'google-calendar': isGoogleCalendarConnected(user),
     }))
-  }, [user?.recallCalendarStatus])
+  }, [user])
 
   const toggle = useCallback((id: IntegrationId) => {
     setConnected((prev) => ({ ...prev, [id]: !prev[id] }))

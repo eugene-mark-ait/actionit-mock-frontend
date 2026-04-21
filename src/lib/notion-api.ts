@@ -3,6 +3,8 @@
  * Uses AWS Lambda to handle Notion operations with secrets from AWS Secrets Manager
  */
 
+import { apiFetch } from '@/lib/api-client'
+
 export interface NotionPage {
   id: string;
   title: string;
@@ -72,11 +74,8 @@ export async function searchNotionPages(userId: string, query?: string): Promise
  */
 export async function selectNotionPage(userId: string, pageId: string, pageTitle: string): Promise<void> {
   try {
-    const response = await fetch(`${NOTION_API_BASE}/notion/select-page`, {
+    const response = await apiFetch(`${NOTION_API_BASE}/notion/select-page`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
         user_id: userId,
         page_id: pageId,
@@ -104,11 +103,8 @@ export async function selectNotionPage(userId: string, pageId: string, pageTitle
  */
 export async function postAnalysisToNotion(userId: string, analysis: any): Promise<void> {
   try {
-    const response = await fetch(`${NOTION_API_BASE}/notion/post-analysis`, {
+    const response = await apiFetch(`${NOTION_API_BASE}/notion/post-analysis`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
         user_id: userId,
         analysis: analysis
@@ -145,11 +141,8 @@ export async function getNotionStatus(userId: string): Promise<{
   marketplace_installed?: boolean;
 }> {
   try {
-    const response = await fetch(`${NOTION_API_BASE}/notion/status?user_id=${userId}`, {
+    const response = await apiFetch(`${NOTION_API_BASE}/notion/status?user_id=${userId}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
     });
 
     if (!response.ok) {

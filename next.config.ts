@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  env: {
+    NEXT_PUBLIC_LAMBDA_OAUTH_API_KEY:
+      process.env.VITE_API_KEY?.trim() || process.env.NEXT_PUBLIC_LAMBDA_OAUTH_API_KEY?.trim() || '',
+  },
   /**
    * Webpack filesystem pack cache can hit ENOENT on rename under Windows (AV or sync tools locking files).
    * Use in-memory cache in dev only; production builds keep the default cache behavior.

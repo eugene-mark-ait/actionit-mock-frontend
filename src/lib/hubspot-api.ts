@@ -1,4 +1,5 @@
 /* HubSpot API Integration via Lambda.*/
+import { apiFetch } from '@/lib/api-client'
 import { HUBSPOT_API_BASE, HUBSPOT_PATHS } from './hubspot-config';
 
 export interface HubspotStatus {
@@ -10,12 +11,11 @@ export interface HubspotStatus {
 /* Get user's HubSpot integration status and call this on dashboard load and when returning from OAuth callback.*/
 export async function getHubspotStatus(userId: string): Promise<HubspotStatus> {
   try {
-    const response = await fetch(
+    const response = await apiFetch(
       `${HUBSPOT_API_BASE}${HUBSPOT_PATHS.status}?user_id=${encodeURIComponent(userId)}`,
       {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }
+      },
     );
 
     if (!response.ok) {

@@ -3,6 +3,8 @@
  * Fetches user statistics from the backend
  */
 
+import { apiFetch } from '@/lib/api-client'
+
 const METRICS_API_BASE = 'https://w6h7umfa5b.execute-api.us-east-1.amazonaws.com/prod';
 
 export interface UserMetrics {
@@ -16,11 +18,8 @@ export interface UserMetrics {
 
 export async function getUserMetrics(userId: string): Promise<UserMetrics> {
   try {
-    const response = await fetch(`${METRICS_API_BASE}/user-metrics?user_id=${encodeURIComponent(userId)}`, {
+    const response = await apiFetch(`${METRICS_API_BASE}/user-metrics?user_id=${encodeURIComponent(userId)}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
     if (!response.ok) {

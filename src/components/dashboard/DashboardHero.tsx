@@ -4,6 +4,7 @@ import React from 'react'
 import { Calendar, Languages, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getLanguageName } from '@/lib/languages'
+import { isGoogleCalendarConnected } from '@/lib/google-calendar-integration'
 import type { DashboardUser } from '@/context/AuthContext'
 
 function greetingLine(displayName: string | undefined | null): string {
@@ -26,7 +27,7 @@ export interface DashboardHeroProps {
 }
 
 export function DashboardHero({ user, transcriptionLanguage }: DashboardHeroProps) {
-  const calendarLinked = user?.recallCalendarStatus === 'connected'
+  const calendarLinked = isGoogleCalendarConnected(user)
   const langLabel = getLanguageName(transcriptionLanguage)
   const plan = subscriptionShort(user?.subscriptionTier)
 

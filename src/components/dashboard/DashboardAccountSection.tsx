@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useCallback } from 'react'
-import Link from 'next/link'
-import { CalendarDays, Mail, Sparkles, User } from 'lucide-react'
+import React, { useCallback, useState } from 'react'
+import { CalendarDays, Loader2, Mail, Sparkles, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import type { DashboardUser } from '@/context/AuthContext'
+import { useAuth, type DashboardUser } from '@/context/AuthContext'
+import { deleteUserAccount, partitionDeletionErrors } from '@/lib/delete-account-api'
 
 function formatMemberSince(iso: string | undefined): string {
   if (!iso) return '—'
@@ -26,36 +26,61 @@ function subscriptionDisplayName(tier: string | undefined): string {
   return tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : 'Free'
 }
 
-function isFreeSubscription(tier: string | undefined): boolean {
-  const t = (tier ?? 'free').toLowerCase()
-  return t === 'free' || t === ''
-}
-
 export interface DashboardAccountSectionProps {
   user: DashboardUser | null
 }
 
 export function DashboardAccountSection({ user }: DashboardAccountSectionProps) {
   const { toast } = useToast()
+  const { logout } = useAuth()
+  const [deleting, setDeleting] = useState(false)
 
-  const handleDeleteAccount = useCallback(() => {
+  const handleDeleteAccount = useCallback(async () => {
+    if (!user?.id) {
+      toast({ title: 'Not signed in', description: 'Sign in again to delete your account.', variant: 'destructive' })
+      return
+    }
     const ok = window.confirm(
       'Delete your account permanently? All data will be removed. This cannot be undone.',
     )
     if (!ok) return
-    toast({
-      title: 'Not available yet',
-      description: 'Account deletion will be available in a future release.',
-      variant: 'destructive',
-    })
-  }, [toast])
+
+    setDeleting(true)
+    try {
+      const result = await deleteUserAccount(user.id)
+      const details = result.deletionResults
+      const detailLine =
+        details &&
+        `Users: ${details.users_deleted}, tokens: ${details.oauth_tokens_deleted}, calendars: ${details.calendars_deleted}, bots: ${details.bots_deleted}`
+      const rawErrors = details?.errors?.filter(Boolean) ?? []
+      const { remaining } = partitionDeletionErrors(rawErrors)
+
+      toast({
+        title: 'Account deleted',
+        description: [result.message, detailLine].filter(Boolean).join(' — '),
+      })
+
+      if (remaining.length > 0) {
+        toast({
+          title: 'Some cleanup steps reported issues',
+          description: remaining.join('; '),
+          variant: 'destructive',
+        })
+      }
+      await logout()
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Could not delete your account.'
+      toast({ title: 'Deletion failed', description: msg, variant: 'destructive' })
+    } finally {
+      setDeleting(false)
+    }
+  }, [user?.id, toast, logout])
 
   const email = user?.email ?? '—'
   const name = user?.name ?? '—'
   const memberSince = formatMemberSince(user?.createdAt)
   const tier = user?.subscriptionTier
   const subscriptionLabel = subscriptionDisplayName(tier)
-  const showUpgrade = isFreeSubscription(tier)
 
   return (
     <section className="text-left" aria-labelledby="dashboard-account-heading">
@@ -130,19 +155,7 @@ export function DashboardAccountSection({ user }: DashboardAccountSectionProps) 
               <Sparkles className="h-3.5 w-3.5 text-[#0099cb]" aria-hidden />
               Subscription
             </dt>
-            <dd className="sf-text mt-1 flex flex-col gap-3 pl-5 sm:flex-row sm:items-center sm:justify-between">
-              <span className="text-sm font-medium text-foreground md:text-base">{subscriptionLabel}</span>
-              {showUpgrade && (
-                <Button
-                  type="button"
-                  asChild
-                  size="sm"
-                  className="sf-text w-full border-0 bg-gradient-to-r from-[#0099cb] to-[#00c6f3] text-white shadow-sm hover:from-[#0088b8] hover:to-[#00b5e0] hover:text-white sm:w-auto"
-                >
-                  <Link href="/pricing">Upgrade</Link>
-                </Button>
-              )}
-            </dd>
+            <dd className="sf-text mt-1 pl-5 text-sm font-medium text-foreground md:text-base">{subscriptionLabel}</dd>
           </div>
         </dl>
 
@@ -151,9 +164,17 @@ export function DashboardAccountSection({ user }: DashboardAccountSectionProps) 
             type="button"
             variant="destructive"
             className="sf-text w-full sm:w-auto"
-            onClick={handleDeleteAccount}
+            disabled={deleting || !user?.id}
+            onClick={() => void handleDeleteAccount()}
           >
-            Delete account
+            {deleting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+                Deleting…
+              </>
+            ) : (
+              'Delete account'
+            )}
           </Button>
         </div>
       </div>

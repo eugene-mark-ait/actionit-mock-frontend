@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Lock } from 'lucide-react'
 import { SiteImage } from '@/components/SiteImage'
 import { TypewriterSequences } from './TypewriterSequences'
+import { useAuth } from '@/context/AuthContext'
 
 const heroTypingSequences = [
   { text: 'action', deleteAfter: true },
@@ -47,6 +48,8 @@ export function HeroFirstViewportBackdrop() {
 }
 
 export function Hero() {
+  const { isAuthenticated, loading: authLoading } = useAuth()
+  const showDashboardCta = !authLoading && isAuthenticated
   const [trustOpacity, setTrustOpacity] = useState(1)
 
   const onScroll = useCallback(() => {
@@ -207,11 +210,11 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
               <Link
-                href="/login"
+                href={showDashboardCta ? '/dashboard' : '/login'}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-brand-cyan px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                aria-label="Start Free with actionit.ai"
+                aria-label={showDashboardCta ? 'Open your actionit.ai dashboard' : 'Start Free with actionit.ai'}
               >
-                Get Started
+                {showDashboardCta ? 'Dashboard' : 'Get Started'}
               </Link>
               <a
                 href="#demo"

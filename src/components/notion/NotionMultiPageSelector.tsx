@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2, Search, FileText, Calendar, CheckCircle2, Plus, X, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
+import { searchNotionPages } from '@/lib/notion-api';
 
 interface NotionPage {
   id: string;
@@ -80,15 +81,9 @@ export const NotionMultiPageSelector: React.FC<NotionMultiPageSelectorProps> = (
 
     setLoading(true);
     try {
-      const response = await fetch(`https://w6h7umfa5b.execute-api.us-east-1.amazonaws.com/prod/notion/search?user_id=${user.id}`);
-      const data = await response.json();
-      
-      if (data.success && data.pages) {
-        setPages(data.pages);
-        setFilteredPages(data.pages);
-      } else {
-        throw new Error(data.error || 'Failed to load pages');
-      }
+      const pagesLoaded = await searchNotionPages(user.id);
+      setPages(pagesLoaded);
+      setFilteredPages(pagesLoaded);
     } catch (error) {
       toast({
         title: "Failed to load pages",

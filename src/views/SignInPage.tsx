@@ -1,11 +1,22 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { Loader2 } from 'lucide-react'
 import { BrandWordmark } from '@/components/BrandWordmark'
 import { SiteImage } from '@/components/SiteImage'
 import { HeroFirstViewportBackdrop } from '../components/Hero'
 import { Navbar } from '../components/Navbar'
+import { useToast } from '@/hooks/use-toast'
+import { useAuth } from '@/context/AuthContext'
+import {
+  clearPendingPlanId,
+  markPendingPlanConfirmedByLoginQuery,
+  setPendingPlanId,
+  type PlanCheckoutId,
+} from '@/lib/plan-flow'
+import { resolvePostAuthDestination } from '@/lib/post-auth-plan-navigation'
 
 function GoogleMark({ className }: { className?: string }) {
   return (
@@ -38,12 +49,17 @@ function GoogleMark({ className }: { className?: string }) {
   )
 }
 
-const googleSignInUrl = process.env.NEXT_PUBLIC_GOOGLE_SIGNIN_URL?.trim() ?? ''
-
 const btnBase =
   'inline-flex w-full items-center justify-center gap-3 rounded-full min-h-[48px] px-6 py-3 text-[15px] font-semibold tracking-tight transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white/80'
 
 export function SignInPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { toast } = useToast()
+  const { loginWithGoogle, loading: authLoading, isAuthenticated, user } = useAuth()
+  const [busy, setBusy] = useState(false)
+  const redirected = useRef(false)
+
   useEffect(() => {
     const prev = document.title
     document.title = 'Sign in | actionit.ai'
@@ -52,7 +68,74 @@ export function SignInPage() {
     }
   }, [])
 
-  const oauthRel = googleSignInUrl.startsWith('http') ? 'noopener noreferrer' : undefined
+  /**
+   * Sync `?plan=` → sessionStorage for post-auth checkout / free flow.
+   * If the URL has no valid `plan`, clear stale `actionit_pending_plan` so a prior pricing visit
+   * does not send a plain `/login` sign-in to `/checkout?plan=business`.
+   */
+  useEffect(() => {
+    const p = searchParams.get('plan')
+    if (p === 'free' || p === 'professional' || p === 'business') {
+      setPendingPlanId(p as PlanCheckoutId)
+      markPendingPlanConfirmedByLoginQuery()
+    } else if (p === 'team') {
+      setPendingPlanId('business')
+      markPendingPlanConfirmedByLoginQuery()
+    } else {
+      clearPendingPlanId()
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (!isAuthenticated) redirected.current = false
+  }, [isAuthenticated])
+
+  /** Already signed in — plan flow + optional ?from= wins over default dashboard. */
+  useEffect(() => {
+    if (authLoading || !isAuthenticated || !user || redirected.current) return
+    redirected.current = true
+    let cancelled = false
+    void (async () => {
+      try {
+        const dest = await resolvePostAuthDestination(user)
+        const from = searchParams.get('from')
+        const useFrom =
+          from &&
+          from.startsWith('/') &&
+          !from.startsWith('//') &&
+          !dest.startsWith('/checkout') &&
+          dest === '/dashboard'
+        const finalDest = useFrom ? from : dest
+        if (!cancelled) router.replace(finalDest)
+      } catch {
+        if (!cancelled) router.replace('/dashboard')
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [authLoading, isAuthenticated, user, router, searchParams])
+
+  const handleGoogle = async () => {
+    try {
+      setBusy(true)
+      await loginWithGoogle()
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Could not start sign-in'
+      toast({ title: 'Sign-in failed', description: msg, variant: 'destructive' })
+      setBusy(false)
+    }
+  }
+
+  const loading = busy || authLoading
+
+  if (!authLoading && isAuthenticated) {
+    return (
+      <div className="flex min-h-[100dvh] items-center justify-center bg-page px-4">
+        <Loader2 className="h-9 w-9 animate-spin text-brand-cyan" aria-hidden />
+      </div>
+    )
+  }
 
   return (
     <div className="relative min-h-screen min-w-0 overflow-x-clip bg-page">
@@ -78,25 +161,15 @@ export function SignInPage() {
             </h1>
           </div>
 
-          {googleSignInUrl ? (
-            <a
-              href={googleSignInUrl}
-              rel={oauthRel}
-              className={`${btnBase} border border-zinc-200/90 bg-white text-zinc-800 shadow-sm hover:bg-zinc-50 hover:shadow-md`}
-            >
-              <GoogleMark className="shrink-0" />
-              Sign in with Google
-            </a>
-          ) : (
-            <button
-              type="button"
-              disabled
-              className={`${btnBase} cursor-not-allowed border border-zinc-200/60 bg-zinc-100/80 text-zinc-500`}
-            >
-              <GoogleMark className="shrink-0 opacity-60" />
-              Sign in with Google
-            </button>
-          )}
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => void handleGoogle()}
+            className={`${btnBase} border border-zinc-200/90 bg-white text-zinc-800 shadow-sm hover:bg-zinc-50 hover:shadow-md disabled:cursor-wait disabled:opacity-80`}
+          >
+            <GoogleMark className="shrink-0" />
+            {loading ? 'Redirecting…' : 'Sign in with Google'}
+          </button>
 
           <p className="mt-8 text-center text-xs text-zinc-500">
             By continuing, you agree to our{' '}

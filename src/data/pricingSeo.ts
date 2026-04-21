@@ -6,12 +6,12 @@ export const PRICING_CANONICAL = 'https://actionit.ai/pricing'
 export const PRICING_PAGE_TITLE = 'Pricing | actionit.ai — Simple, Transparent Plans'
 
 export const PRICING_PAGE_DESCRIPTION =
-  'Choose a plan that fits your workflow. Free, Professional, and Team plans with dataless AI meeting intelligence, Notion integration, and privacy-first architecture.'
+  'Choose a plan that fits your workflow. Free, Professional, and Business plans with dataless AI meeting intelligence, Notion integration, and privacy-first architecture.'
 
 export const PRICING_OG_TITLE = 'Pricing | actionit.ai'
 
 export const PRICING_OG_DESCRIPTION =
-  'Simple, transparent pricing for individuals and teams. Start free or trial Professional and Team plans.'
+  'Simple, transparent pricing for individuals and teams. Start free or trial Professional and Business plans.'
 
 export const pricingMetadata: Metadata = {
   title: PRICING_PAGE_TITLE,

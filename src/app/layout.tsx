@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import { Suspense } from 'react'
 import { rootMetadata } from '@/data/rootMetadata'
+import { AppProviders } from '@/app/providers'
 import './globals.css'
 
 const inter = Inter({
@@ -38,7 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'G-KHHWWVXH5S');
           `}
         </Script>
-        <Suspense fallback={null}>{children}</Suspense>
+        <Suspense fallback={null}>
+          <AppProviders>{children}</AppProviders>
+        </Suspense>
       </body>
     </html>
   )

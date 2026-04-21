@@ -5,7 +5,12 @@ import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { useIsLgUp } from '@/hooks/use-mobile'
-import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/languages'
+import {
+  SUPPORTED_LANGUAGES,
+  DEFAULT_LANGUAGE,
+  isLanguageSupported,
+} from '@/lib/languages'
+import { getUserPreferencesApiBase, updateTranscriptionLanguagePreference } from '@/lib/user-preferences-api'
 import { TutorialModal, type Tutorial } from '@/components/dashboard/TutorialModal'
 import { Dock } from '@/components/dashboard/Dock'
 import { OnboardingModal } from '@/components/dashboard/OnboardingModal'
@@ -13,6 +18,7 @@ import { DashboardSidebar, getDashboardMainMarginLeft } from '@/components/dashb
 import { DashboardIntegrationsSection } from '@/components/dashboard/DashboardIntegrationsSection'
 import { DashboardAccountSection } from '@/components/dashboard/DashboardAccountSection'
 import { DashboardHero } from '@/components/dashboard/DashboardHero'
+import { isGoogleCalendarConnected } from '@/lib/google-calendar-integration'
 
 // Tutorial data for dock → modal flow (unchanged from previous dashboard)
 const TUTORIALS: Tutorial[] = [
@@ -308,17 +314,58 @@ const Dashboard = () => {
     return () => clearTimeout(timer)
   }, [])
 
-  const handleTranscriptionLanguageChange = (code: string) => {
-    setTranscriptionLanguage(code)
-    try {
-      localStorage.setItem('transcription_language', code)
-    } catch {
-      /* ignore */
+  const handleTranscriptionLanguageChange = async (code: string) => {
+    if (!isLanguageSupported(code)) {
+      toast({
+        title: 'Unsupported language',
+        description: 'Pick a language from the supported list.',
+        variant: 'destructive',
+      })
+      return
     }
-    toast({
-      title: 'Language updated',
-      description: `Transcription set to ${SUPPORTED_LANGUAGES.find((l) => l.code === code)?.name ?? code}.`,
-    })
+    if (code === transcriptionLanguage) return
+
+    const label = SUPPORTED_LANGUAGES.find((l) => l.code === code)?.name ?? code
+
+    const persistLocal = () => {
+      setTranscriptionLanguage(code)
+      try {
+        localStorage.setItem('transcription_language', code)
+      } catch {
+        /* ignore */
+      }
+    }
+
+    if (!user?.id) {
+      persistLocal()
+      toast({
+        title: 'Language updated',
+        description: `Transcription set to ${label} on this device.`,
+      })
+      return
+    }
+
+    const prefsBase = getUserPreferencesApiBase()
+    if (!prefsBase) {
+      persistLocal()
+      toast({
+        title: 'Language updated (this device only)',
+        description: `Transcription set to ${label}. Configure NEXT_PUBLIC_USER_PREFERENCES_API_BASE or NEXT_PUBLIC_API_GATEWAY_URL to sync with your account.`,
+      })
+      return
+    }
+
+    try {
+      const result = await updateTranscriptionLanguagePreference(user.id, code)
+      persistLocal()
+      toast({
+        title: 'Language updated',
+        description: result.message || `Transcription set to ${label}.`,
+      })
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Could not save language preference.'
+      toast({ title: 'Language not saved', description: msg, variant: 'destructive' })
+    }
   }
 
   const desktopMainMarginPx = getDashboardMainMarginLeft(isSidebarExpanded)
@@ -340,7 +387,7 @@ const Dashboard = () => {
 
   const tutorialsWithStatus = TUTORIALS.map((tutorial) => {
     if (tutorial.platform === 'Google Calendar') {
-      return { ...tutorial, connected: user?.recallCalendarStatus === 'connected' }
+      return { ...tutorial, connected: isGoogleCalendarConnected(user) }
     }
     return tutorial
   })

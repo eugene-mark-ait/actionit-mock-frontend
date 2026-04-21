@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { SUPPORTED_LANGUAGES, getLanguageName } from '@/lib/languages'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { UpgradePlanDialog } from '@/components/plan/UpgradePlanDialog'
 
 const RAIL_COLLAPSED = 72
 const RAIL_EXPANDED = 260
@@ -49,7 +50,7 @@ export function getDashboardMainMarginLeft(expanded: boolean): number {
 
 export interface DashboardSidebarProps {
   transcriptionLanguage: string
-  onTranscriptionLanguageChange: (code: string) => void
+  onTranscriptionLanguageChange: (code: string) => void | Promise<void>
   isAgentEnabled: boolean
   onAgentToggle: (enabled: boolean) => void
   isCalendarUpdateEnabled: boolean
@@ -538,6 +539,19 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 <ThemePopoverChrome title="AI meeting agent">{agentSettings('popover')}</ThemePopoverChrome>
               </PopoverContent>
             </Popover>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="w-full min-w-0">
+                  <UpgradePlanDialog triggerClassName={navBtn()} isExpanded={isExpanded} />
+                </div>
+              </TooltipTrigger>
+              {!isExpanded && (
+                <TooltipContent side="right" className={cn('max-w-xs', RAIL_OVERLAY_NO_MOTION)}>
+                  Upgrade plan
+                </TooltipContent>
+              )}
+            </Tooltip>
             </div>
           </div>
 

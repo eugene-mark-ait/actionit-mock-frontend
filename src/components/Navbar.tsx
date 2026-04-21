@@ -6,6 +6,7 @@ import { useRef, useState } from 'react'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { BrandWordmark } from '@/components/BrandWordmark'
 import { SiteImage } from '@/components/SiteImage'
+import { useAuth } from '@/context/AuthContext'
 import { navFeatures, navIndustries, navProductLinks } from '../data/siteContent'
 import { cn } from '../lib/cn'
 import { scrollToHash as scrollToHashSmooth } from '../lib/scrollToHash'
@@ -16,6 +17,8 @@ const dropdownPanelClass =
 export function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { isAuthenticated, loading: authLoading } = useAuth()
+  const showDashboardNav = !authLoading && isAuthenticated
   const isHome = pathname === '/'
   const [mobileOpen, setMobileOpen] = useState(false)
   /** Mobile / tablet drawer: which nav group is expanded (accordion — one at a time, default all collapsed). */
@@ -212,10 +215,10 @@ export function Navbar() {
 
           <div className="hidden shrink-0 items-center gap-3 md:flex">
             <Link
-              href="/login"
+              href={showDashboardNav ? '/dashboard' : '/login'}
               className="inline-flex items-center justify-center rounded-full min-h-[44px] px-6 py-2.5 text-sm font-semibold bg-[#00B4D8] text-white shadow-sm hover:bg-[#0ea5e9] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B4D8]"
             >
-              Get Started
+              {showDashboardNav ? 'Dashboard' : 'Get Started'}
             </Link>
           </div>
 
@@ -354,14 +357,14 @@ export function Navbar() {
                 Pricing
               </Link>
               <Link
-                href="/login"
+                href={showDashboardNav ? '/dashboard' : '/login'}
                 className="mt-2 inline-flex justify-center rounded-full py-3 text-sm font-semibold bg-[#00B4D8] text-white"
                 onClick={() => {
                   setMobileSection(null)
                   setMobileOpen(false)
                 }}
               >
-                Get Started
+                {showDashboardNav ? 'Dashboard' : 'Get Started'}
               </Link>
             </div>
           </div>

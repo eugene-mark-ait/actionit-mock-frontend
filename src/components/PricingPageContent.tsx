@@ -4,15 +4,15 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/cn'
+import { PLAN_TIERS } from '@/data/planTiers'
+import type { PlanCheckoutId } from '@/lib/plan-flow'
 
 /** Shown in UI and used for annual price math (effective monthly = list × (1 − rate)). */
 export const ANNUAL_SAVINGS_PERCENT = 20
 const ANNUAL_SAVINGS_RATE = ANNUAL_SAVINGS_PERCENT / 100
 
-type TierId = 'free' | 'professional' | 'team'
-
 type TierDef = {
-  id: TierId
+  id: PlanCheckoutId
   name: string
   subtitle: string
   /** Monthly list price (USD). 0 = free. */
@@ -22,50 +22,28 @@ type TierDef = {
   highlight?: 'popular'
 }
 
-const tiers: TierDef[] = [
-  {
-    id: 'free',
-    name: 'Free',
-    subtitle: 'Perfect for trying out actionit.ai',
-    monthlyUsd: 0,
-    features: [
-      '3 meeting transcription per month',
-      'AI-powered meeting summaries',
-      'Notion integration',
-      'Calendar integration',
-    ],
-    cta: { href: '/login', label: 'Start for free', variant: 'secondary' },
-  },
-  {
-    id: 'professional',
-    name: 'Professional',
-    subtitle: 'Perfect for individuals and small teams',
-    monthlyUsd: 22.99,
-    features: [
-      'Unlimited meeting transcription',
-      'AI-powered meeting summaries',
-      'Notion integration',
-      'Email notifications',
-      'Calendar integration',
-    ],
-    cta: { href: '/login', label: 'Start free trial', variant: 'primary' },
-  },
-  {
-    id: 'team',
-    name: 'Team',
-    subtitle: 'For teams and organisations',
-    monthlyUsd: 55.99,
-    features: [
-      'Everything in Professional',
-      'Advanced analytics & insights',
-      'Team collaboration features',
-      'Priority support',
-      'Custom integrations',
-    ],
-    cta: { href: '/login', label: 'Start Free trial', variant: 'emphasis' },
-    highlight: 'popular',
-  },
-]
+function tierCta(id: PlanCheckoutId): TierDef['cta'] {
+  const labels: Record<PlanCheckoutId, string> = {
+    free: 'Start for free',
+    professional: 'Start free trial',
+    business: 'Start Free trial',
+  }
+  const variants: Record<PlanCheckoutId, 'secondary' | 'primary' | 'emphasis'> = {
+    free: 'secondary',
+    professional: 'primary',
+    business: 'emphasis',
+  }
+  return {
+    href: `/login?plan=${id}`,
+    label: labels[id],
+    variant: variants[id],
+  }
+}
+
+const tiers: TierDef[] = PLAN_TIERS.map((t) => ({
+  ...t,
+  cta: tierCta(t.id),
+}))
 
 function formatUsd(amount: number) {
   return new Intl.NumberFormat('en-US', {
