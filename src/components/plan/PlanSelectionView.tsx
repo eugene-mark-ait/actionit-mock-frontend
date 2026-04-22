@@ -236,7 +236,9 @@ export function PlanSelectionView({ mode = 'default', className, onDone }: PlanS
                 <button
                   type="button"
                   disabled={loading || isCurrentPlan}
-                  onClick={() => void handlePaidSelect(tier.id)}
+                  onClick={() =>
+                    void handlePaidSelect(tier.id as Exclude<PlanCheckoutId, 'free'>)
+                  }
                   className={cn(
                     btnBase,
                     isCurrentPlan &&

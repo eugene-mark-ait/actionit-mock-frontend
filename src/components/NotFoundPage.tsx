@@ -2,8 +2,6 @@
 
 import Link from 'next/link'
 import { ArrowRight, Home, Radio } from 'lucide-react'
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { cn } from '@/lib/cn'
 
 export function NotFoundPage() {

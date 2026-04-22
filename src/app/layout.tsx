@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap"
           rel="stylesheet"
         />
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
@@ -29,9 +29,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KHHWWVXH5S"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

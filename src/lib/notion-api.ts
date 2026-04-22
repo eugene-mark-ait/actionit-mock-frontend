@@ -152,9 +152,7 @@ export async function getNotionStatus(userId: string): Promise<{
     }
 
     const data: any = await response.json();
-    
-    console.log('[Notion API] Status response:', JSON.stringify(data, null, 2));
-    
+
     if (!data.success) {
       throw new Error(data.error || 'Failed to get status');
     }
@@ -168,9 +166,7 @@ export async function getNotionStatus(userId: string): Promise<{
       token_invalid: data.token_invalid || false,
       marketplace_installed: data.marketplace_installed ?? false,
     };
-    
-    console.log('[Notion API] Parsed result:', JSON.stringify(result, null, 2));
-    
+
     return result;
   } catch (error) {
     console.error('Error getting Notion status:', error);

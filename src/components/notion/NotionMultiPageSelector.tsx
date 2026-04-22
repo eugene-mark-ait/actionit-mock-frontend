@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -50,26 +50,7 @@ export const NotionMultiPageSelector: React.FC<NotionMultiPageSelectorProps> = (
   const { toast } = useToast();
   const { user } = useAuth();
 
-  // Load pages when component mounts
-  useEffect(() => {
-    if (isOpen) {
-      loadPages();
-    }
-  }, [isOpen]);
-
-  // Filter pages based on search query
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredPages(pages);
-    } else {
-      const filtered = pages.filter(page => 
-        page.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredPages(filtered);
-    }
-  }, [searchQuery, pages]);
-
-  const loadPages = async () => {
+  const loadPages = useCallback(async () => {
     if (!user?.id) {
       toast({
         title: "Authentication Required",
@@ -84,7 +65,7 @@ export const NotionMultiPageSelector: React.FC<NotionMultiPageSelectorProps> = (
       const pagesLoaded = await searchNotionPages(user.id);
       setPages(pagesLoaded);
       setFilteredPages(pagesLoaded);
-    } catch (error) {
+    } catch {
       toast({
         title: "Failed to load pages",
         description: "Could not fetch your Notion pages. Please try again.",
@@ -93,7 +74,26 @@ export const NotionMultiPageSelector: React.FC<NotionMultiPageSelectorProps> = (
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id, toast]);
+
+  // Load pages when sheet opens
+  useEffect(() => {
+    if (isOpen) {
+      void loadPages();
+    }
+  }, [isOpen, loadPages]);
+
+  // Filter pages based on search query
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredPages(pages);
+    } else {
+      const filtered = pages.filter(page => 
+        page.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredPages(filtered);
+    }
+  }, [searchQuery, pages]);
 
   const handleSearch = async () => {
     if (searchQuery.trim() === '') {
@@ -110,7 +110,7 @@ export const NotionMultiPageSelector: React.FC<NotionMultiPageSelectorProps> = (
       const { searchNotionPages } = await import('@/lib/notion-api');
       const searchResults = await searchNotionPages(user.id, searchQuery);
       setFilteredPages(searchResults);
-    } catch (error) {
+    } catch {
       toast({
         title: "Search failed",
         description: "Could not search your Notion pages. Please try again.",

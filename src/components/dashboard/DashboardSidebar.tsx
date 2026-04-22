@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Globe, Settings, LogOut, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { BarChart3, Globe, LayoutDashboard, LogOut, Menu, Settings, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { cn } from '@/lib/utils'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -95,6 +95,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 }) => {
   const { logout } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
+  const isOverview = pathname === '/dashboard'
+  const isInsights = pathname === '/dashboard/insights'
 
   const [isExpanded, setIsExpanded] = useState(() => {
     if (typeof window === 'undefined') return true
@@ -134,6 +137,14 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     cn(
       'group relative flex w-full items-center rounded-xl py-2.5 text-left outline-none transition-none hover:bg-slate-100',
       isExpanded ? 'gap-3 px-3' : 'justify-center px-2',
+      className,
+    )
+
+  const navPageBtn = (active: boolean, className?: string) =>
+    cn(
+      navBtn(),
+      active &&
+        'bg-gradient-to-r from-[#0099cb]/10 to-[#00c6f3]/10 ring-1 ring-[#0099cb]/18 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.65)]',
       className,
     )
 
@@ -330,6 +341,43 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
             </button>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="border-b border-slate-100 px-4 py-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Navigate</p>
+              <div className="mt-2 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    router.push('/dashboard')
+                    closeMobile()
+                  }}
+                  className={cn(
+                    'flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-none',
+                    isOverview
+                      ? 'bg-gradient-to-r from-[#0099cb]/12 to-[#00c6f3]/12 text-foreground'
+                      : 'text-foreground/90 hover:bg-muted',
+                  )}
+                >
+                  <LayoutDashboard className="h-4 w-4 shrink-0 text-[#0099cb]" aria-hidden />
+                  Overview
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    router.push('/dashboard/insights')
+                    closeMobile()
+                  }}
+                  className={cn(
+                    'flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-none',
+                    isInsights
+                      ? 'bg-gradient-to-r from-[#0099cb]/12 to-[#00c6f3]/12 text-foreground'
+                      : 'text-foreground/90 hover:bg-muted',
+                  )}
+                >
+                  <BarChart3 className="h-4 w-4 shrink-0 text-[#0099cb]" aria-hidden />
+                  Insights
+                </button>
+              </div>
+            </div>
             <div className="border-b border-border px-4 py-4">
               <Label
                 htmlFor="mobile-drawer-transcription-lang"
@@ -464,6 +512,80 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               </p>
             )}
             <div className={cn(RAIL_NAV_GROUP, 'space-y-0.5')}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className={navPageBtn(isOverview)}
+                  onClick={() => router.push('/dashboard')}
+                  aria-label="Overview"
+                  aria-current={isOverview ? 'page' : undefined}
+                >
+                  <LayoutDashboard
+                    className={cn(
+                      'h-5 w-5 shrink-0 transition-colors',
+                      isOverview ? 'text-[#0099cb]' : 'text-slate-600 group-hover:text-[#0099cb]',
+                    )}
+                    aria-hidden
+                  />
+                  {isExpanded && (
+                    <span
+                      className={cn(
+                        'min-w-0 flex-1 truncate text-sm font-medium',
+                        isOverview
+                          ? 'bg-gradient-to-r from-[#0099cb] to-[#00c6f3] bg-clip-text text-transparent'
+                          : 'text-foreground',
+                      )}
+                    >
+                      Overview
+                    </span>
+                  )}
+                </button>
+              </TooltipTrigger>
+              {!isExpanded && (
+                <TooltipContent side="right" className={cn('max-w-xs', RAIL_OVERLAY_NO_MOTION)}>
+                  Overview
+                </TooltipContent>
+              )}
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className={navPageBtn(isInsights)}
+                  onClick={() => router.push('/dashboard/insights')}
+                  aria-label="Insights"
+                  aria-current={isInsights ? 'page' : undefined}
+                >
+                  <BarChart3
+                    className={cn(
+                      'h-5 w-5 shrink-0 transition-colors',
+                      isInsights ? 'text-[#0099cb]' : 'text-slate-600 group-hover:text-[#0099cb]',
+                    )}
+                    aria-hidden
+                  />
+                  {isExpanded && (
+                    <span
+                      className={cn(
+                        'min-w-0 flex-1 truncate text-sm font-medium',
+                        isInsights
+                          ? 'bg-gradient-to-r from-[#0099cb] to-[#00c6f3] bg-clip-text text-transparent'
+                          : 'text-foreground',
+                      )}
+                    >
+                      Insights
+                    </span>
+                  )}
+                </button>
+              </TooltipTrigger>
+              {!isExpanded && (
+                <TooltipContent side="right" className={cn('max-w-xs', RAIL_OVERLAY_NO_MOTION)}>
+                  Insights
+                </TooltipContent>
+              )}
+            </Tooltip>
+
             <Popover open={isLanguageOpen} onOpenChange={setIsLanguageOpen}>
               <Tooltip>
                 <TooltipTrigger asChild>

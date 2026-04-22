@@ -6,7 +6,10 @@ import { usePathname } from 'next/navigation'
 import { scrollToHash } from '../lib/scrollToHash'
 import { Navbar } from '../components/Navbar'
 import { Hero, HeroFirstViewportBackdrop } from '../components/Hero'
-import { Footer } from '../components/Footer'
+
+const Footer = dynamic(() => import('../components/Footer').then((m) => ({ default: m.Footer })), {
+  ssr: true,
+})
 
 const ProductSection = dynamic(
   () => import('../components/LandingSections').then((m) => ({ default: m.ProductSection })),

@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+'use client'
+
+import React, { useState, useEffect } from 'react';
 import { X, Play, Clock, CheckCircle2 } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -33,7 +35,6 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
 }) => {
   const [isHelpful, setIsHelpful] = useState<boolean | null>(null);
   const [comment, setComment] = useState('');
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (isOpen && tutorial) {

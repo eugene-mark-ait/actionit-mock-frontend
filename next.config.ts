@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  /** Tree-shake icon imports (barrel-friendly) for smaller client bundles. */
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   env: {
     NEXT_PUBLIC_LAMBDA_OAUTH_API_KEY:
       process.env.VITE_API_KEY?.trim() || process.env.NEXT_PUBLIC_LAMBDA_OAUTH_API_KEY?.trim() || '',
