@@ -242,7 +242,7 @@ export function DashboardShell({ children, mainAriaLabel, enableOnboarding = tru
       {
         id: 'salesforce',
         name: 'Salesforce',
-        icon: <img src="/Salesforce.png" alt="Salesforce" className="h-6 w-6 object-contain" />,
+        icon: <img src="/salesforce.png" alt="Salesforce" className="h-6 w-6 object-contain" />,
         connected: false,
       },
       {

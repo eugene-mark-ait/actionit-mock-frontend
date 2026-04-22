@@ -49,6 +49,13 @@ const nextConfig: NextConfig = {
     }
     return [{ source: '/:path*', headers: [...h] }]
   },
+  async redirects() {
+    return [
+      { source: '/app', destination: '/dashboard', permanent: true },
+      { source: '/app/', destination: '/dashboard', permanent: true },
+      { source: '/app/:path*', destination: '/dashboard', permanent: true },
+    ]
+  },
   /** Local Next install can emit a bad `.next/types` stub for dynamic routes; safe to ignore until deps are refreshed. */
   typescript: {
     ignoreBuildErrors: true,

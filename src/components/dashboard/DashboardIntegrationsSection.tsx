@@ -26,7 +26,7 @@ type IntegrationDef = {
 const INTEGRATIONS: IntegrationDef[] = [
   { id: 'google-calendar', name: 'Google Calendar', logoSrc: '/google.png' },
   { id: 'zoom', name: 'Zoom', logoSrc: '/zoom logo.png' },
-  { id: 'salesforce', name: 'Salesforce', logoSrc: '/Salesforce.png' },
+  { id: 'salesforce', name: 'Salesforce', logoSrc: '/salesforce.png' },
   { id: 'slack', name: 'Slack', logoSrc: '/Slack.png' },
   { id: 'notion', name: 'Notion', logoSrc: '/notion-logo-no-background.png' },
   { id: 'hubspot', name: 'HubSpot', logoSrc: 'https://cdn.simpleicons.org/hubspot/FF7A59' },
